@@ -1,20 +1,13 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 class Home extends Component {
-  static navigationOptions = {
-    header: null,
-  };
-
   render() {
-    const {navigation} = this.props;
     const {container, text} = styles;
     return (
       <View style={container}>
-        <TouchableOpacity onPress={() => navigation.navigate('Main')}>
-          <Text style={text}>MENU JP FOOD</Text>
-          <Text style={text}>"Translate to JP"</Text>
-        </TouchableOpacity>
+        <Text style={text}>MENU JP FOOD</Text>
+        <Text style={text}>"Translate to JP"</Text>
       </View>
     );
   }
