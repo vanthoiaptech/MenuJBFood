@@ -25,129 +25,130 @@ class Categories extends Component {
       btnText,
       categoryItemText,
     } = styles;
+    const {navigation} = this.props;
     return (
       <View style={container}>
         <View style={categoriesWrapper}>
-          <View style={categoryItem}>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
-          <View style={categoryItem}>
+          </LinearGradient>
+          <LinearGradient
+            colors={['#E8723D', '#DA6423', '#D35D16']}
+            style={categoryItem}>
             <TouchableOpacity
               style={categoryButton}
-              onPress={() =>
-                this.props.navigation.navigate('ListRestaurantsScreen')
-              }>
+              onPress={() => navigation.navigate('ListRestaurantsScreen')}>
               <Image source={require('../../../../images/icon/tab-icon.png')} />
               <Text style={categoryItemText}>Hải sản</Text>
             </TouchableOpacity>
-          </View>
+          </LinearGradient>
         </View>
         <View style={btnWrapper}>
           <LinearGradient
@@ -184,11 +185,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   categoryItem: {
+    borderRadius: 20,
     margin: 5,
   },
   categoryButton: {
-    backgroundColor: '#8BB92F',
-    borderRadius: 20,
     width: (width - 50) / 3,
     height: (width - 50) / 3,
     justifyContent: 'center',

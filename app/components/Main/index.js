@@ -82,7 +82,7 @@ const TabNavigation = createBottomTabNavigator(
     },
   },
   {
-    initialRouteName: 'Categories',
+    initialRouteName: 'Maps',
     tabBarOptions: {
       inactiveBackgroundColor: '#54A121',
       activeBackgroundColor: '#C23017',

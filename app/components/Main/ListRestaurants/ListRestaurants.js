@@ -1,12 +1,18 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {FlatList, SafeAreaView} from 'react-native';
+import listRestaurants from '../../../../api/data';
+import Restaurant from './Restaurant';
 
 class ListRestaurants extends Component {
   render() {
     return (
-      <View>
-        <Text>ListRestaurantsComponent </Text>
-      </View>
+      <SafeAreaView>
+        <FlatList
+          data={listRestaurants}
+          renderItem={({item}) => <Restaurant item={item} />}
+          keyExtractor={item => item.id.toString()}
+        />
+      </SafeAreaView>
     );
   }
 }
