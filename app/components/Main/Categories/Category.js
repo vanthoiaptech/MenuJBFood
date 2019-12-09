@@ -1,0 +1,63 @@
+import React, {Component} from 'react';
+import {
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+
+const {width} = Dimensions.get('window');
+class Category extends Component {
+  // ['#C74A3F', '#B93322', '#B32B17'],
+  // ['#E6B81E', '#D9AF27', '#D2A91B'],
+  // ['#978D63', '#8A8054', '#847A4E'],
+  // ['#97C543', '#89B82E', '#86B423'],
+
+  render() {
+    const {categoryItem, categoryItemText, imageStyle} = styles;
+    const {navigation, category} = this.props;
+    return (
+      <LinearGradient
+        colors={['#E6B81E', '#D9AF27', '#D2A91B']}
+        style={categoryItem}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ListRestaurantsScreen')}>
+          <Image
+            style={imageStyle}
+            source={require('../../../images/logo_trang.png')}
+          />
+          <Text style={categoryItemText}>{category.name}</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  categoryItem: {
+    borderRadius: 20,
+    margin: 5,
+    width: (width - 50) / 3,
+    height: (width - 50) / 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnWrapper: {
+    alignItems: 'center',
+  },
+  categoryItemText: {
+    color: '#FFF',
+    textTransform: 'uppercase',
+    fontSize: 12,
+  },
+  imageStyle: {
+    width: 50,
+    height: 50,
+    resizeMode: 'center',
+    marginBottom: 10,
+  },
+});
+
+export default Category;

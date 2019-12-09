@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
+import {Rating} from 'react-native-elements';
 
 class Restaurant extends Component {
   render() {
@@ -7,6 +8,7 @@ class Restaurant extends Component {
       container,
       nameText,
       addressText,
+      rating,
       phoneText,
       imageWrapper,
       imageStyle,
@@ -18,18 +20,15 @@ class Restaurant extends Component {
         <View style={imageWrapper}>
           <Image
             style={imageStyle}
-            source={{
-              uri:
-                'https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/103924047/original/ca15308a37c9af2c269da0e1bd86daec5d290f6d/design-a-food-restaurant-logo-with-a-unique-style.png',
-            }}
+            source={require('../../../images/LOGO.png')}
           />
         </View>
         <View style={contentWrapper}>
           <Text style={nameText}>{item.name}</Text>
           <Text style={addressText}>{item.address}</Text>
-          <View>
+          <View style={rating}>
             <Text style={phoneText}>{item.phone}</Text>
-            <Text>{item.rate}</Text>
+            <Rating startingValue={item.rate} imageSize={18} readonly />
           </View>
         </View>
       </View>
@@ -39,10 +38,11 @@ class Restaurant extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
+    borderColor: '#BBBBBB',
     flex: 10,
     flexDirection: 'row',
+    paddingVertical: 10,
   },
   imageWrapper: {
     flex: 3,
@@ -50,11 +50,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageStyle: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
+    resizeMode: 'center',
   },
   contentWrapper: {
     flex: 7,
+    paddingRight: 30,
   },
   nameText: {
     color: '#922213',
@@ -65,6 +67,11 @@ const styles = StyleSheet.create({
     color: '#001F5F',
     flex: 1,
     flexWrap: 'wrap',
+  },
+  rating: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   phoneText: {
     color: '#2A5010',

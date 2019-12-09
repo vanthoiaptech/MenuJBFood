@@ -7,7 +7,9 @@ import Categories from '../Main/Categories/Categories';
 import Maps from '../Main/Maps/Maps';
 import Rating from '../Main/Rating/Rating';
 import ListRestaurants from './ListRestaurants/ListRestaurants';
+import MenuFoods from './MenuFoods/MenuFoods';
 
+// route categories
 const CategoryStack = createStackNavigator({
   CategoriesScreen: {
     screen: Categories,
@@ -23,7 +25,14 @@ const CategoryStack = createStackNavigator({
   },
 });
 
+// route maps
 const MapsStack = createStackNavigator({
+  MenuFoodsScreen: {
+    screen: MenuFoods,
+    navigationOptions: {
+      title: 'MenuFoods',
+    },
+  },
   MapsScreen: {
     screen: Maps,
     navigationOptions: {
@@ -32,6 +41,7 @@ const MapsStack = createStackNavigator({
   },
 });
 
+// route rating
 const RatingStack = createStackNavigator({
   RatingScreen: {
     screen: Rating,
@@ -41,6 +51,7 @@ const RatingStack = createStackNavigator({
   },
 });
 
+// route tab bar
 const TabBarComponent = props => <BottomTabBar {...props} />;
 const TabNavigation = createBottomTabNavigator(
   {
@@ -50,7 +61,7 @@ const TabNavigation = createBottomTabNavigator(
         tabBarLabel: 'Bản đồ',
         tabBarIcon: () => (
           <Image
-            source={require('../../../images/icon/tab-icon.png')}
+            source={require('../../images/icon/tab-icon.png')}
             style={styles.iconStyle}
           />
         ),
@@ -62,7 +73,7 @@ const TabNavigation = createBottomTabNavigator(
         tabBarLabel: 'Thể loại',
         tabBarIcon: () => (
           <Image
-            source={require('../../../images/icon/tab-icon.png')}
+            source={require('../../images/icon/tab-icon.png')}
             style={styles.iconStyle}
           />
         ),
@@ -74,7 +85,7 @@ const TabNavigation = createBottomTabNavigator(
         tabBarLabel: 'Đánh giá',
         tabBarIcon: () => (
           <Image
-            source={require('../../../images/icon/tab-icon.png')}
+            source={require('../../images/icon/tab-icon.png')}
             style={styles.iconStyle}
           />
         ),
