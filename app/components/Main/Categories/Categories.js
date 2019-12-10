@@ -14,8 +14,8 @@ class Categories extends Component {
           contentContainerStyle={listCategories}
           data={categories}
           numColumns={3}
-          renderItem={({item}) => (
-            <Category navigation={navigation} category={item} />
+          renderItem={({item, index}) => (
+            <Category navigation={navigation} category={item} index={index} />
           )}
           keyExtractor={item => item.id.toString()}
           ListFooterComponent={<LoadMoreButton />}

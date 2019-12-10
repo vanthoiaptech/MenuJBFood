@@ -8,6 +8,10 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import foods from '../../../../api/foods';
+import Food from './Food';
+import LoadMoreButton from '../LoadMoreButton';
 
 const {width} = Dimensions.get('window');
 
@@ -19,12 +23,15 @@ class MenuFoods extends Component {
       bannerImg,
       listFoods,
       contentWrapper,
+      contentButton,
       contentText,
       contentLogo,
       logoImg,
       addressText,
       openText,
     } = styles;
+    const {navigation} = this.props;
+
     return (
       <View style={container}>
         <View style={banner}>
@@ -33,22 +40,32 @@ class MenuFoods extends Component {
             source={require('../../../images/restaurants.jpg')}
           />
           <View style={contentWrapper}>
-            <View style={contentText}>
-              <Text style={addressText}>
-                46 Phan Thanh, Quận Thanh Khê, Đà Nẵng
-              </Text>
-              <Text style={openText}>Giờ mở cửa: 10:00 - 22:00</Text>
-            </View>
-            <View style={contentLogo}>
-              <Image
-                style={logoImg}
-                source={require('../../../images/logo_trang.png')}
-              />
-            </View>
+            <TouchableOpacity
+              style={contentButton}
+              onPress={() => navigation.navigate('MapDirectionsScreen')}>
+              <View style={contentText}>
+                <Text style={addressText}>
+                  46 Phan Thanh, Quận Thanh Khê, Đà Nẵng
+                </Text>
+                <Text style={openText}>Giờ mở cửa: 10:00 - 22:00</Text>
+              </View>
+              <View style={contentLogo}>
+                <Image
+                  style={logoImg}
+                  source={require('../../../images/logo_trang.png')}
+                />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
+        {/* Foods list */}
         <SafeAreaView style={listFoods}>
-          <Text>Test</Text>
+          <FlatList
+            data={foods}
+            renderItem={({item, index}) => <Food food={item} index={index} />}
+            keyExtractor={item => item.id.toString()}
+            ListFooterComponent={LoadMoreButton}
+          />
         </SafeAreaView>
       </View>
     );
@@ -58,6 +75,7 @@ class MenuFoods extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 10,
+    width: width,
   },
   banner: {
     flex: 4,
@@ -65,12 +83,9 @@ const styles = StyleSheet.create({
   },
   bannerImg: {
     width: width,
-    height: width / 1.5,
+    height: width / 2,
   },
   contentWrapper: {
-    flex: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -78,6 +93,11 @@ const styles = StyleSheet.create({
     width: width,
     paddingVertical: 10,
     paddingHorizontal: 20,
+  },
+  contentButton: {
+    flex: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   contentText: {
     flex: 9,
@@ -101,7 +121,6 @@ const styles = StyleSheet.create({
   },
   listFoods: {
     flex: 6,
-    backgroundColor: 'blue',
   },
 });
 

@@ -10,17 +10,18 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const {width} = Dimensions.get('window');
 class Category extends Component {
-  // ['#C74A3F', '#B93322', '#B32B17'],
-  // ['#E6B81E', '#D9AF27', '#D2A91B'],
-  // ['#978D63', '#8A8054', '#847A4E'],
-  // ['#97C543', '#89B82E', '#86B423'],
-
   render() {
     const {categoryItem, categoryItemText, imageStyle} = styles;
-    const {navigation, category} = this.props;
+    const {navigation, category, index} = this.props;
+    const bgColors = [
+      ['#C74A3F', '#B93322', '#B32B17'],
+      ['#E6B81E', '#D9AF27', '#D2A91B'],
+      ['#978D63', '#8A8054', '#847A4E'],
+      ['#97C543', '#89B82E', '#86B423'],
+    ];
     return (
       <LinearGradient
-        colors={['#E6B81E', '#D9AF27', '#D2A91B']}
+        colors={bgColors[index % bgColors.length]}
         style={categoryItem}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ListRestaurantsScreen')}>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {Rating} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 class Restaurant extends Component {
   render() {
@@ -14,24 +15,26 @@ class Restaurant extends Component {
       imageStyle,
       contentWrapper,
     } = styles;
-    const {item} = this.props;
+    const {item, navigation} = this.props;
     return (
-      <View style={container}>
-        <View style={imageWrapper}>
-          <Image
-            style={imageStyle}
-            source={require('../../../images/LOGO.png')}
-          />
-        </View>
-        <View style={contentWrapper}>
-          <Text style={nameText}>{item.name}</Text>
-          <Text style={addressText}>{item.address}</Text>
-          <View style={rating}>
-            <Text style={phoneText}>{item.phone}</Text>
-            <Rating startingValue={item.rate} imageSize={18} readonly />
+      <TouchableOpacity onPress={() => navigation.navigate('MenuFoodsScreen')}>
+        <View style={container}>
+          <View style={imageWrapper}>
+            <Image
+              style={imageStyle}
+              source={require('../../../images/LOGO.png')}
+            />
+          </View>
+          <View style={contentWrapper}>
+            <Text style={nameText}>{item.name}</Text>
+            <Text style={addressText}>{item.address}</Text>
+            <View style={rating}>
+              <Text style={phoneText}>{item.phone}</Text>
+              <Rating startingValue={item.rate} imageSize={18} readonly />
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
