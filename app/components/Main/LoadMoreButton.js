@@ -14,6 +14,10 @@ const {width} = Dimensions.get('window');
 class LoadMoreButton extends Component {
   render() {
     const {btnWrapper, btnGradient, button, iconButton, btnText} = styles;
+    const {lengthData} = this.props;
+    if (lengthData === 0) {
+      return null;
+    }
     return (
       <View style={btnWrapper}>
         <LinearGradient
@@ -38,7 +42,7 @@ class LoadMoreButton extends Component {
 
 const styles = StyleSheet.create({
   btnWrapper: {
-    marginTop: 20,
+    marginVertical: 20,
     alignItems: 'center',
   },
   btnGradient: {

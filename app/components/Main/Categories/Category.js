@@ -9,9 +9,10 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 const {width} = Dimensions.get('window');
+
 class Category extends Component {
   render() {
-    const {categoryItem, categoryItemText, imageStyle} = styles;
+    const {categoryItem, categoryItemText, imageStyle, btnWrapper} = styles;
     const {navigation, category, index} = this.props;
     const bgColors = [
       ['#C74A3F', '#B93322', '#B32B17'],
@@ -24,7 +25,12 @@ class Category extends Component {
         colors={bgColors[index % bgColors.length]}
         style={categoryItem}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ListRestaurantsScreen')}>
+          style={btnWrapper}
+          onPress={() =>
+            navigation.navigate('ListRestaurantsScreen', {
+              categoryId: category.id,
+            })
+          }>
           <Image
             style={imageStyle}
             source={require('../../../images/logo_trang.png')}
@@ -52,6 +58,8 @@ const styles = StyleSheet.create({
     color: '#FFF',
     textTransform: 'uppercase',
     fontSize: 12,
+    textAlign: 'center',
+    marginHorizontal: 10,
   },
   imageStyle: {
     width: 50,

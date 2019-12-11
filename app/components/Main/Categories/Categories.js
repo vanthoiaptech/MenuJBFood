@@ -3,11 +3,15 @@ import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import categories from '../../../../api/categories';
 import Category from './Category';
 import LoadMoreButton from '../LoadMoreButton';
+import EmptyData from '../EmptyData';
 
 class Categories extends Component {
   render() {
     const {container, listCategories} = styles;
     const {navigation} = this.props;
+    if (categories.length === 0) {
+      return <EmptyData />;
+    }
     return (
       <SafeAreaView style={container}>
         <FlatList
@@ -18,7 +22,9 @@ class Categories extends Component {
             <Category navigation={navigation} category={item} index={index} />
           )}
           keyExtractor={item => item.id.toString()}
-          ListFooterComponent={<LoadMoreButton />}
+          ListFooterComponent={
+            <LoadMoreButton lengthData={categories.length} />
+          }
         />
       </SafeAreaView>
     );

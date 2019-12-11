@@ -15,7 +15,7 @@ import listRestaurants from '../../../../api/restaurants';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATTITUDE_DELTA = 0.0922;
+const LATTITUDE_DELTA = 0.035;
 const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 class Maps extends Component {
@@ -23,10 +23,12 @@ class Maps extends Component {
     super(props);
     this.state = {
       listRestaurants,
+      marginTop: 0,
     };
   }
 
   componentDidMount() {
+    setTimeout(() => this.setState({marginTop: -1}), 500);
     this.requestLocationPermission();
   }
 
@@ -56,19 +58,22 @@ class Maps extends Component {
         this.setState({initialPosition});
       },
       error => Alert.alert(error.message),
-      {enableHighAccuracy: true, timeout: 10000, maximumAge: 1000},
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
   };
 
   render() {
-    const {container, map, imageMarker, titleMarker} = styles;
+    const {container, imageMarker, titleMarker} = styles;
     const {navigation} = this.props;
     return (
       <View style={container}>
         <MapView
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
-          style={map}
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            marginTop: this.state.marginTop,
+          }}
           initialRegion={this.state.initialPosition}>
           {this.state.listRestaurants.map(marker => (
             <Marker
@@ -99,18 +104,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-    left: 0,
-    right: 0,
-  },
   imageMarker: {
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
+    resizeMode: 'center',
   },
   titleMarker: {
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 12,
+    width: 100,
   },
 });
 

@@ -1,7 +1,8 @@
 const listRestaurants = [
   {
     id: 1,
-    name: 'Hải sản năm đảnh',
+    category_id: 1,
+    name: 'Hải sản Đà Nẵng 1',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.427101,
     longitude: -122.067547,
@@ -12,7 +13,8 @@ const listRestaurants = [
   },
   {
     id: 2,
-    name: 'Hải sản năm đảnh',
+    category_id: 1,
+    name: 'Hải sản Đà Nẵng 2',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.415922,
     longitude: -122.06789,
@@ -23,7 +25,8 @@ const listRestaurants = [
   },
   {
     id: 3,
-    name: 'Hải sản năm đảnh',
+    category_id: 1,
+    name: 'Hải sản Đà Nẵng 3',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.412105,
     longitude: -122.077503,
@@ -34,7 +37,8 @@ const listRestaurants = [
   },
   {
     id: 4,
-    name: 'Hải sản năm đảnh',
+    category_id: 1,
+    name: 'Hải sản Đà Nẵng 4',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.41674,
     longitude: -122.106686,
@@ -45,7 +49,8 @@ const listRestaurants = [
   },
   {
     id: 5,
-    name: 'Hải sản năm đảnh',
+    category_id: 1,
+    name: 'Hải sản Đà Nẵng 5',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.426283,
     longitude: -122.120075,
@@ -56,7 +61,8 @@ const listRestaurants = [
   },
   {
     id: 6,
-    name: 'Hải sản năm đảnh',
+    category_id: 2,
+    name: 'Bánh xèo Đà Nẵng 1',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.425193,
     longitude: -122.137241,
@@ -67,7 +73,8 @@ const listRestaurants = [
   },
   {
     id: 7,
-    name: 'Hải sản năm đảnh',
+    category_id: 2,
+    name: 'Bánh xèo Đà Nẵng 2',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.451908,
     longitude: -122.138615,
@@ -78,7 +85,8 @@ const listRestaurants = [
   },
   {
     id: 8,
-    name: 'Hải sản năm đảnh',
+    category_id: 2,
+    name: 'Bánh xèo Đà Nẵng 3',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.447547,
     longitude: -122.103252,
@@ -89,7 +97,8 @@ const listRestaurants = [
   },
   {
     id: 9,
-    name: 'Hải sản năm đảnh',
+    category_id: 2,
+    name: 'Bánh xèo Đà Nẵng 4',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.431191,
     longitude: -122.082996,
@@ -100,7 +109,8 @@ const listRestaurants = [
   },
   {
     id: 10,
-    name: 'Hải sản năm đảnh',
+    category_id: 2,
+    name: 'Bánh xèo Đà Nẵng 5',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.418922,
     longitude: -122.104626,
