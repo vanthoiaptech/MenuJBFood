@@ -48,7 +48,7 @@ const headerStyleCommon = {
         flexGrow: 1,
         alignSelf: 'center',
         textTransform: 'uppercase',
-        fontSize: 18,
+        fontSize: 14,
       },
       headerStyle: {
         backgroundColor: '#00AF50',
@@ -70,15 +70,9 @@ const CategoryStack = createStackNavigator(
     },
     ListRestaurantsScreen: {
       screen: ListRestaurants,
-      navigationOptions: {
-        title: 'ListRestaurants',
-      },
     },
     MenuFoodsScreen: {
       screen: MenuFoods,
-      navigationOptions: {
-        title: 'MenuFoods',
-      },
     },
   },
   {...headerStyleCommon},
@@ -95,9 +89,6 @@ const MapsStack = createStackNavigator(
     },
     MenuFoodsScreen: {
       screen: MenuFoods,
-      navigationOptions: {
-        title: 'MenuFoods',
-      },
     },
     MapDirectionsScreen: {
       screen: MapDirections,

@@ -15,9 +15,10 @@ class Restaurant extends Component {
       imageStyle,
       contentWrapper,
     } = styles;
-    const {item, navigation} = this.props;
+    const {restaurant, navigation} = this.props;
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('MenuFoodsScreen')}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('MenuFoodsScreen', {restaurant})}>
         <View style={container}>
           <View style={imageWrapper}>
             <Image
@@ -26,11 +27,11 @@ class Restaurant extends Component {
             />
           </View>
           <View style={contentWrapper}>
-            <Text style={nameText}>{item.name}</Text>
-            <Text style={addressText}>{item.address}</Text>
+            <Text style={nameText}>{restaurant.name}</Text>
+            <Text style={addressText}>{restaurant.address}</Text>
             <View style={rating}>
-              <Text style={phoneText}>{item.phone}</Text>
-              <Rating startingValue={item.rate} imageSize={18} readonly />
+              <Text style={phoneText}>{restaurant.phone}</Text>
+              <Rating startingValue={restaurant.rate} imageSize={18} readonly />
             </View>
           </View>
         </View>

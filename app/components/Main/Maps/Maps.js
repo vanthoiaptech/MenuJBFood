@@ -15,7 +15,7 @@ import listRestaurants from '../../../../api/restaurants';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATTITUDE_DELTA = 0.035;
+const LATTITUDE_DELTA = 0.1;
 const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 class Maps extends Component {
@@ -75,19 +75,22 @@ class Maps extends Component {
             marginTop: this.state.marginTop,
           }}
           initialRegion={this.state.initialPosition}>
-          {this.state.listRestaurants.map(marker => (
+          {this.state.listRestaurants.map(restaurant => (
             <Marker
-              key={marker.id}
+              key={restaurant.id}
               coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
+                latitude: restaurant.latitude,
+                longitude: restaurant.longitude,
               }}>
               <Image
                 style={imageMarker}
                 source={require('../../../images/icon/marker.png')}
               />
-              <Callout onPress={() => navigation.navigate('MenuFoodsScreen')}>
-                <Text style={titleMarker}>{marker.name}</Text>
+              <Callout
+                onPress={() =>
+                  navigation.navigate('MenuFoodsScreen', {restaurant})
+                }>
+                <Text style={titleMarker}>{restaurant.name}</Text>
               </Callout>
             </Marker>
           ))}

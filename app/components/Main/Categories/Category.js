@@ -29,6 +29,7 @@ class Category extends Component {
           onPress={() =>
             navigation.navigate('ListRestaurantsScreen', {
               categoryId: category.id,
+              categoryName: category.name,
             })
           }>
           <Image

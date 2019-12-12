@@ -16,6 +16,20 @@ import LoadMoreButton from '../LoadMoreButton';
 const {width} = Dimensions.get('window');
 
 class MenuFoods extends Component {
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: navigation.getParam('restaurant').name,
+    };
+  };
+
+  getFoodsByRestaurantId = id => {
+    return foods.filter(item => {
+      if (item.restaurant_id === id) {
+        return item;
+      }
+    });
+  };
+
   render() {
     const {
       container,
@@ -32,6 +46,9 @@ class MenuFoods extends Component {
     } = styles;
     const {navigation} = this.props;
 
+    console.log(this.props.navigation.state.params);
+    const {restaurant} = this.props.navigation.state.params;
+
     return (
       <View style={container}>
         <View style={banner}>
@@ -44,10 +61,10 @@ class MenuFoods extends Component {
               style={contentButton}
               onPress={() => navigation.navigate('MapDirectionsScreen')}>
               <View style={contentText}>
-                <Text style={addressText}>
-                  46 Phan Thanh, Quận Thanh Khê, Đà Nẵng
+                <Text style={addressText}>{restaurant.address}</Text>
+                <Text style={openText}>
+                  Giờ mở cửa: {restaurant.open} - {restaurant.close}
                 </Text>
-                <Text style={openText}>Giờ mở cửa: 10:00 - 22:00</Text>
               </View>
               <View style={contentLogo}>
                 <Image
@@ -61,10 +78,14 @@ class MenuFoods extends Component {
         {/* Foods list */}
         <SafeAreaView style={listFoods}>
           <FlatList
-            data={foods}
+            data={this.getFoodsByRestaurantId(restaurant.id)}
             renderItem={({item, index}) => <Food food={item} index={index} />}
             keyExtractor={item => item.id.toString()}
-            ListFooterComponent={LoadMoreButton}
+            ListFooterComponent={
+              <LoadMoreButton
+                lengthData={this.getFoodsByRestaurantId(restaurant.id).length}
+              />
+            }
           />
         </SafeAreaView>
       </View>
@@ -93,6 +114,7 @@ const styles = StyleSheet.create({
     width: width,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    opacity: 0.8,
   },
   contentButton: {
     flex: 10,

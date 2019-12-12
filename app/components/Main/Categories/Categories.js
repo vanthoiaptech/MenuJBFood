@@ -9,7 +9,7 @@ class Categories extends Component {
   render() {
     const {container, listCategories} = styles;
     const {navigation} = this.props;
-    if (categories.length === 0) {
+    if (categories.length <= 0) {
       return <EmptyData />;
     }
     return (
