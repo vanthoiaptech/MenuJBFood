@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {SafeAreaView, StyleSheet, FlatList, View, Text} from 'react-native';
 import categories from '../../../../api/categories';
 import Category from './Category';
 import LoadMoreButton from '../LoadMoreButton';
 import EmptyData from '../EmptyData';
+
+import i18n from '../../../utils/i18n';
 
 class Categories extends Component {
   render() {
@@ -14,6 +16,9 @@ class Categories extends Component {
     }
     return (
       <SafeAreaView style={container}>
+        <View>
+          <Text>{i18n.t('welcome')}</Text>
+        </View>
         <FlatList
           contentContainerStyle={listCategories}
           data={categories}

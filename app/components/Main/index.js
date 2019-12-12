@@ -1,8 +1,9 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View, Alert} from 'react-native';
 import {createBottomTabNavigator, BottomTabBar} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
+import {createDrawerNavigator} from 'react-navigation-drawer';
 import {Icon} from 'react-native-elements';
 import Categories from '../Main/Categories/Categories';
 import Maps from '../Main/Maps/Maps';
@@ -10,6 +11,12 @@ import Rating from '../Main/Rating/Rating';
 import ListRestaurants from './ListRestaurants/ListRestaurants';
 import MenuFoods from './MenuFoods/MenuFoods';
 import MapDirections from './Maps/MapDirections';
+import i18n from '../../utils/i18n';
+
+const changeLanguage = lng => {
+  i18n.changeLanguage(lng);
+};
+changeLanguage('en');
 
 // customize header react navigation
 const headerStyleCommon = {
@@ -34,12 +41,12 @@ const headerStyleCommon = {
         </View>
       ),
       headerRight: () => (
-        <View style={styles.iconMenu}>
+        <View style={styles.headerRight}>
           <Icon
             name="bars"
             type="font-awesome"
             color="#EFD478"
-            onPress={() => alert('test')}
+            onPress={() => Alert.alert('test')}
           />
         </View>
       ),
@@ -155,7 +162,7 @@ const TabNavigation = createBottomTabNavigator(
     },
   },
   {
-    initialRouteName: 'Maps',
+    initialRouteName: 'Categories',
     tabBarOptions: {
       inactiveBackgroundColor: '#54A121',
       activeBackgroundColor: '#C23017',
@@ -174,6 +181,12 @@ const TabNavigation = createBottomTabNavigator(
     ),
   },
 );
+
+const DrawerNavigator = createDrawerNavigator({
+  Tabbar: {
+    screen: TabNavigation,
+  },
+});
 
 const styles = StyleSheet.create({
   iconStyle: {
@@ -198,9 +211,9 @@ const styles = StyleSheet.create({
   backButton: {
     marginLeft: 60,
   },
-  iconMenu: {
+  headerRight: {
     marginRight: 10,
   },
 });
 
-export default createAppContainer(TabNavigation);
+export default createAppContainer(DrawerNavigator);

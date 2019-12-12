@@ -15,7 +15,7 @@ import listRestaurants from '../../../../api/restaurants';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATTITUDE_DELTA = 0.1;
+const LATTITUDE_DELTA = 0.035;
 const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 class Maps extends Component {
