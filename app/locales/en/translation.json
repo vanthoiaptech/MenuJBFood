@@ -1,3 +1,11 @@
 {
-  "welcome": "Welcome"
+  "categories": {
+    "title": "Categories"
+  },
+  "maps": {
+    "title": "Maps"
+  },
+  "rating": {
+    "title": "Rating"
+  }
 }

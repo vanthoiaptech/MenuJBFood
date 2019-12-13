@@ -1,3 +1,11 @@
 {
-  "welcome": "Chào mừng"
+  "categories": {
+    "title": "Thể loại"
+  },
+  "maps": {
+    "title": "Bản đồ"
+  },
+  "rating": {
+    "title": "Đánh giá"
+  }
 }

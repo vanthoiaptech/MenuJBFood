@@ -1,3 +1,11 @@
 {
-  "welcome": "ようこそ"
+  "categories": {
+    "title": "カテゴリー"
+  },
+  "maps": {
+    "title": "地図"
+  },
+  "rating": {
+    "title": "格付け"
+  }
 }

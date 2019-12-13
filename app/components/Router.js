@@ -1,23 +1,21 @@
 import React from 'react';
-import {Image, StyleSheet, View, Alert} from 'react-native';
+import {Image, StyleSheet, View, Dimensions} from 'react-native';
 import {createBottomTabNavigator, BottomTabBar} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {Icon} from 'react-native-elements';
-import Categories from '../Main/Categories/Categories';
-import Maps from '../Main/Maps/Maps';
-import Rating from '../Main/Rating/Rating';
-import ListRestaurants from './ListRestaurants/ListRestaurants';
-import MenuFoods from './MenuFoods/MenuFoods';
-import MapDirections from './Maps/MapDirections';
-import i18n from '../../utils/i18n';
+import Categories from './Main/Categories/Categories';
+import Maps from './Main/Maps/Maps';
+import Rating from './Main/Rating/Rating';
+import ListRestaurants from './Main/ListRestaurants/ListRestaurants';
+import MenuFoods from './Main/MenuFoods/MenuFoods';
+import MapDirections from './Main/Maps/MapDirections';
+import Menu from './Main/Menu/Menu';
+import LanguageSetting from './Main/LanguageSetting/LanguageSetting';
+import i18n from '../utils/i18n';
 
-const changeLanguage = lng => {
-  i18n.changeLanguage(lng);
-};
-changeLanguage('en');
-
+const {width} = Dimensions.get('window');
 // customize header react navigation
 const headerStyleCommon = {
   defaultNavigationOptions: ({navigation}) => {
@@ -26,7 +24,7 @@ const headerStyleCommon = {
         <View style={styles.logoHeader}>
           <Image
             style={styles.logoImg}
-            source={require('../../images/logo_trang.png')}
+            source={require('../images/logo_trang.png')}
           />
         </View>
       ),
@@ -46,7 +44,7 @@ const headerStyleCommon = {
             name="bars"
             type="font-awesome"
             color="#EFD478"
-            onPress={() => Alert.alert('test')}
+            onPress={() => navigation.openDrawer()}
           />
         </View>
       ),
@@ -72,7 +70,7 @@ const CategoryStack = createStackNavigator(
     CategoriesScreen: {
       screen: Categories,
       navigationOptions: {
-        title: 'Categories',
+        title: i18n.t('categories:title'),
       },
     },
     ListRestaurantsScreen: {
@@ -91,7 +89,7 @@ const MapsStack = createStackNavigator(
     MapsScreen: {
       screen: Maps,
       navigationOptions: {
-        title: 'Bản đồ',
+        title: i18n.t('maps:title'),
       },
     },
     MenuFoodsScreen: {
@@ -113,24 +111,37 @@ const RatingStack = createStackNavigator(
     RatingScreen: {
       screen: Rating,
       navigationOptions: {
-        title: 'Rating',
+        title: i18n.t('rating:title'),
       },
     },
   },
   {...headerStyleCommon},
 );
 
-// route tab bar
+// route language setting
+const LanguageSettingStack = createStackNavigator(
+  {
+    LanguageSettingScreen: {
+      screen: LanguageSetting,
+      navigationOptions: {
+        title: 'Change language',
+      },
+    },
+  },
+  {...headerStyleCommon},
+);
+
+// route tabbar
 const TabBarComponent = props => <BottomTabBar {...props} />;
 const TabNavigation = createBottomTabNavigator(
   {
     Maps: {
       screen: MapsStack,
       navigationOptions: {
-        tabBarLabel: 'Bản đồ',
+        tabBarLabel: i18n.t('maps:title'),
         tabBarIcon: () => (
           <Image
-            source={require('../../images/logo_trang.png')}
+            source={require('../images/logo_trang.png')}
             style={styles.iconStyle}
           />
         ),
@@ -139,10 +150,10 @@ const TabNavigation = createBottomTabNavigator(
     Categories: {
       screen: CategoryStack,
       navigationOptions: {
-        tabBarLabel: 'Thể loại',
+        tabBarLabel: i18n.t('categories:title'),
         tabBarIcon: () => (
           <Image
-            source={require('../../images/logo_trang.png')}
+            source={require('../images/logo_trang.png')}
             style={styles.iconStyle}
           />
         ),
@@ -151,10 +162,10 @@ const TabNavigation = createBottomTabNavigator(
     Rating: {
       screen: RatingStack,
       navigationOptions: {
-        tabBarLabel: 'Đánh giá',
+        tabBarLabel: i18n.t('rating:title'),
         tabBarIcon: () => (
           <Image
-            source={require('../../images/logo_trang.png')}
+            source={require('../images/logo_trang.png')}
             style={styles.iconStyle}
           />
         ),
@@ -182,11 +193,24 @@ const TabNavigation = createBottomTabNavigator(
   },
 );
 
-const DrawerNavigator = createDrawerNavigator({
-  Tabbar: {
-    screen: TabNavigation,
+// drawer menu sidebar
+const DrawerNavigator = createDrawerNavigator(
+  {
+    Tabbar: {
+      screen: TabNavigation,
+    },
+    LanguageSetting: {
+      screen: LanguageSettingStack,
+    },
   },
-});
+  {
+    drawerWidth: width / 1.5,
+    drawerPosition: 'right',
+    contentComponent: props => <Menu {...props} />,
+  },
+);
+
+export default createAppContainer(DrawerNavigator);
 
 const styles = StyleSheet.create({
   iconStyle: {
@@ -215,5 +239,3 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
-
-export default createAppContainer(DrawerNavigator);

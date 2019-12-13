@@ -7,6 +7,7 @@ import {
   Dimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import i18n from '../../../utils/i18n';
 
 const {width} = Dimensions.get('window');
 

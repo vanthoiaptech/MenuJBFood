@@ -1,51 +1,51 @@
 const categories = [
   {
     id: 1,
-    name: 'Hải sản',
+    name: 'Seafood',
   },
   {
     id: 2,
-    name: 'Bánh xèo',
+    name: 'Hot Pot',
   },
   {
     id: 3,
-    name: 'Bánh mỳ',
+    name: 'Grill',
   },
   {
     id: 4,
-    name: 'Lẩu',
+    name: 'Forest cuisine',
   },
   {
     id: 5,
-    name: 'Coffee',
-  },
-  {
-    id: 6,
-    name: 'Fast food',
-  },
-  {
-    id: 7,
     name: 'Buffet',
   },
   {
+    id: 6,
+    name: 'Vegetarian food',
+  },
+  {
+    id: 7,
+    name: 'Japanese food',
+  },
+  {
     id: 8,
-    name: 'Hải sản',
+    name: 'Korean food',
   },
   {
     id: 9,
-    name: 'Món Huế',
+    name: 'Affordable',
   },
   {
     id: 10,
-    name: 'Món Ý',
+    name: 'Italian food',
   },
   {
     id: 11,
-    name: 'Đặc sản miền nam',
+    name: 'Party, event',
   },
   {
     id: 12,
-    name: 'Kiểu nhật',
+    name: 'European food',
   },
 ];
 
