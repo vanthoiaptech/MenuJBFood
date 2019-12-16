@@ -11,7 +11,10 @@ import {
 import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS} from 'react-native-permissions';
-import listRestaurants from '../../../../api/restaurants';
+import locale from 'react-native-locale-detector';
+import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
+import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
+import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -20,6 +23,13 @@ const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 class Maps extends Component {
   constructor(props) {
+    let listRestaurants = listRestaurantsJA;
+    if (locale === 'en-US') {
+      listRestaurants = listRestaurantsEN;
+    }
+    if (locale === 'vi-VN') {
+      listRestaurants = listRestaurantsVI;
+    }
     super(props);
     this.state = {
       listRestaurants,

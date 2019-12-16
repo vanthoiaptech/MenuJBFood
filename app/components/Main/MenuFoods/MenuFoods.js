@@ -9,9 +9,13 @@ import {
   Dimensions,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import foods from '../../../../api/foods';
+import locale from 'react-native-locale-detector';
+import foodsVI from '../../../../api/foods/foods_vi';
+import foodsEN from '../../../../api/foods/foods_en';
+import foodsJA from '../../../../api/foods/foods_ja';
 import Food from './Food';
 import LoadMoreButton from '../LoadMoreButton';
+import i18n from '../../../utils/i18n';
 
 const {width} = Dimensions.get('window');
 
@@ -23,6 +27,13 @@ class MenuFoods extends Component {
   };
 
   getFoodsByRestaurantId = id => {
+    let foods = foodsJA;
+    if (locale === 'en-US') {
+      foods = foodsEN;
+    }
+    if (locale === 'vi-VN') {
+      foods = foodsVI;
+    }
     return foods.filter(item => {
       if (item.restaurant_id === id) {
         return item;
@@ -63,7 +74,8 @@ class MenuFoods extends Component {
               <View style={contentText}>
                 <Text style={addressText}>{restaurant.address}</Text>
                 <Text style={openText}>
-                  Giờ mở cửa: {restaurant.open} - {restaurant.close}
+                  {i18n.t('categories:business hours')}: {restaurant.open} -{' '}
+                  {restaurant.close}
                 </Text>
               </View>
               <View style={contentLogo}>

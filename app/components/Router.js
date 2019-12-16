@@ -54,6 +54,7 @@ const headerStyleCommon = {
         alignSelf: 'center',
         textTransform: 'uppercase',
         fontSize: 14,
+        marginLeft: 60,
       },
       headerStyle: {
         backgroundColor: '#00AF50',

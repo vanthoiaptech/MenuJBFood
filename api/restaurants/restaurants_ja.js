@@ -2,7 +2,7 @@ const listRestaurants = [
   {
     id: 1,
     category_id: 1,
-    name: 'Hải sản Đà Nẵng 1',
+    name: '京都寿司レストラン',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.427101,
     longitude: -122.067547,
@@ -14,7 +14,7 @@ const listRestaurants = [
   {
     id: 2,
     category_id: 1,
-    name: 'Hải sản Đà Nẵng 2',
+    name: 'Banjiro - Kushiyaki Banjiro Grill Skewer Restaurant',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.415922,
     longitude: -122.06789,
@@ -26,7 +26,7 @@ const listRestaurants = [
   {
     id: 3,
     category_id: 1,
-    name: 'Hải sản Đà Nẵng 3',
+    name: 'わびさび日本料理店',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.412105,
     longitude: -122.077503,
@@ -38,7 +38,7 @@ const listRestaurants = [
   {
     id: 4,
     category_id: 1,
-    name: 'Hải sản Đà Nẵng 4',
+    name: '寿司ワールド日本料理店',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.41674,
     longitude: -122.106686,
@@ -50,7 +50,7 @@ const listRestaurants = [
   {
     id: 5,
     category_id: 1,
-    name: 'Hải sản Đà Nẵng 5',
+    name: 'サバクシーフードレストラン',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.426283,
     longitude: -122.120075,
@@ -61,8 +61,8 @@ const listRestaurants = [
   },
   {
     id: 6,
-    category_id: 2,
-    name: 'Bánh xèo Đà Nẵng 1',
+    category_id: 7,
+    name: '直子ちゃん日本食レストラン',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.425193,
     longitude: -122.137241,
@@ -73,8 +73,8 @@ const listRestaurants = [
   },
   {
     id: 7,
-    category_id: 2,
-    name: 'Bánh xèo Đà Nẵng 2',
+    category_id: 7,
+    name: 'たこ焼きケーキ',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.451908,
     longitude: -122.138615,
@@ -85,8 +85,8 @@ const listRestaurants = [
   },
   {
     id: 8,
-    category_id: 2,
-    name: 'Bánh xèo Đà Nẵng 3',
+    category_id: 7,
+    name: 'Phuc Nguレストラン',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.447547,
     longitude: -122.103252,
@@ -97,8 +97,8 @@ const listRestaurants = [
   },
   {
     id: 9,
-    category_id: 2,
-    name: 'Bánh xèo Đà Nẵng 4',
+    category_id: 7,
+    name: "Min's Sushi and BBQ",
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.431191,
     longitude: -122.082996,
@@ -109,8 +109,8 @@ const listRestaurants = [
   },
   {
     id: 10,
-    category_id: 2,
-    name: 'Bánh xèo Đà Nẵng 5',
+    category_id: 7,
+    name: 'わかくレストラン',
     address: '139/59/33, 10 Trần Quang Khải, Thọ Quang, Sơn Trà, Đà Nẵng',
     latitude: 37.418922,
     longitude: -122.104626,

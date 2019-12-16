@@ -1,6 +1,7 @@
 {
   "categories": {
-    "title": "カテゴリー"
+    "title": "カテゴリー",
+    "business hours": "営業時間"
   },
   "maps": {
     "title": "地図"
