@@ -18,7 +18,7 @@ import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATTITUDE_DELTA = 0.035;
+const LATTITUDE_DELTA = 0.012;
 const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 class Maps extends Component {
@@ -95,6 +95,7 @@ class Maps extends Component {
               <Image
                 style={imageMarker}
                 source={require('../../../images/icon/marker.png')}
+                tintColor="#DD3624"
               />
               <Callout
                 onPress={() =>

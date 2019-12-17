@@ -8,5 +8,8 @@
   },
   "rating": {
     "title": "Đánh giá"
+  },
+  "common": {
+    "empty data" : "Không có dữ liệu..."
   }
 }

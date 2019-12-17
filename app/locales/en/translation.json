@@ -8,5 +8,8 @@
   },
   "rating": {
     "title": "Rating"
+  },
+  "common": {
+    "empty data" : "No data available..."
   }
 }

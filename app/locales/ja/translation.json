@@ -8,5 +8,8 @@
   },
   "rating": {
     "title": "格付け"
+  },
+  "common": {
+    "empty data" : "データなし..."
   }
 }

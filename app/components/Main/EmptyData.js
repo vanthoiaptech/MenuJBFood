@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import i18n from '../../utils/i18n';
 
 class EmptyData extends Component {
   render() {
     const {container, text} = styles;
     return (
       <View style={container}>
-        <Text style={text}>No data available...</Text>
+        <Text style={text}>{i18n.t('common:empty data')}</Text>
       </View>
     );
   }

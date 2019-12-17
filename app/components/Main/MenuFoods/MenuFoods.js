@@ -7,6 +7,9 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  Linking,
+  Alert,
+  Platform,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import locale from 'react-native-locale-detector';
@@ -16,6 +19,7 @@ import foodsJA from '../../../../api/foods/foods_ja';
 import Food from './Food';
 import LoadMoreButton from '../LoadMoreButton';
 import i18n from '../../../utils/i18n';
+import EmptyData from '../EmptyData';
 
 const {width} = Dimensions.get('window');
 
@@ -41,6 +45,25 @@ class MenuFoods extends Component {
     });
   };
 
+  openGps = (lat, lng) => {
+    // const url = `https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination=${lat}, ${lng}`;
+    const url = Platform.select({
+      ios: `http://maps.apple.com/maps?daddr=${lat},${lng}`,
+      android: `http://maps.google.com/maps?daddr=${lat},${lng}`,
+    });
+    Linking.canOpenURL(url)
+      .then(supported => {
+        if (supported) {
+          return Linking.openURL(url);
+        } else {
+          console.log("Can't handle url: " + url);
+        }
+      })
+      .catch(error => {
+        Alert.alert(error);
+      });
+  };
+
   render() {
     const {
       container,
@@ -55,10 +78,27 @@ class MenuFoods extends Component {
       addressText,
       openText,
     } = styles;
-    const {navigation} = this.props;
-
-    console.log(this.props.navigation.state.params);
     const {restaurant} = this.props.navigation.state.params;
+
+    // Foods list
+    let foodsFlatList = (
+      <SafeAreaView style={listFoods}>
+        <FlatList
+          data={this.getFoodsByRestaurantId(restaurant.id)}
+          renderItem={({item, index}) => <Food food={item} index={index} />}
+          keyExtractor={item => item.id.toString()}
+          ListFooterComponent={
+            <LoadMoreButton
+              lengthData={this.getFoodsByRestaurantId(restaurant.id).length}
+            />
+          }
+        />
+      </SafeAreaView>
+    );
+
+    if (this.getFoodsByRestaurantId(restaurant.id).length === 0) {
+      foodsFlatList = <EmptyData />;
+    }
 
     return (
       <View style={container}>
@@ -70,7 +110,9 @@ class MenuFoods extends Component {
           <View style={contentWrapper}>
             <TouchableOpacity
               style={contentButton}
-              onPress={() => navigation.navigate('MapDirectionsScreen')}>
+              onPress={() =>
+                this.openGps(restaurant.latitude, restaurant.longitude)
+              }>
               <View style={contentText}>
                 <Text style={addressText}>{restaurant.address}</Text>
                 <Text style={openText}>
@@ -87,19 +129,7 @@ class MenuFoods extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        {/* Foods list */}
-        <SafeAreaView style={listFoods}>
-          <FlatList
-            data={this.getFoodsByRestaurantId(restaurant.id)}
-            renderItem={({item, index}) => <Food food={item} index={index} />}
-            keyExtractor={item => item.id.toString()}
-            ListFooterComponent={
-              <LoadMoreButton
-                lengthData={this.getFoodsByRestaurantId(restaurant.id).length}
-              />
-            }
-          />
-        </SafeAreaView>
+        {foodsFlatList}
       </View>
     );
   }
@@ -115,8 +145,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   bannerImg: {
+    flex: 4,
     width: width,
-    height: width / 2,
   },
   contentWrapper: {
     position: 'absolute',

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-class Home extends Component {
+class Splash extends Component {
   render() {
     const {container, text} = styles;
     return (
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Splash;

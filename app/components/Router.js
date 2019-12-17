@@ -10,7 +10,6 @@ import Maps from './Main/Maps/Maps';
 import Rating from './Main/Rating/Rating';
 import ListRestaurants from './Main/ListRestaurants/ListRestaurants';
 import MenuFoods from './Main/MenuFoods/MenuFoods';
-import MapDirections from './Main/Maps/MapDirections';
 import Menu from './Main/Menu/Menu';
 import LanguageSetting from './Main/LanguageSetting/LanguageSetting';
 import i18n from '../utils/i18n';
@@ -95,12 +94,6 @@ const MapsStack = createStackNavigator(
     },
     MenuFoodsScreen: {
       screen: MenuFoods,
-    },
-    MapDirectionsScreen: {
-      screen: MapDirections,
-      navigationOptions: {
-        title: 'MapDirections',
-      },
     },
   },
   {...headerStyleCommon},
