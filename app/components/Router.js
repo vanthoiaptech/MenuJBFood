@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, View, Dimensions} from 'react-native';
 import {createBottomTabNavigator, BottomTabBar} from 'react-navigation-tabs';
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {Icon} from 'react-native-elements';
@@ -11,6 +11,7 @@ import Rating from './Main/Rating/Rating';
 import ListRestaurants from './Main/ListRestaurants/ListRestaurants';
 import MenuFoods from './Main/MenuFoods/MenuFoods';
 import Menu from './Main/Menu/Menu';
+import Splash from './Splash';
 import LanguageSetting from './Main/LanguageSetting/LanguageSetting';
 import i18n from '../utils/i18n';
 
@@ -204,7 +205,12 @@ const DrawerNavigator = createDrawerNavigator(
   },
 );
 
-export default createAppContainer(DrawerNavigator);
+const InitialNavigator = createSwitchNavigator({
+  Splash: Splash,
+  App: DrawerNavigator,
+});
+
+export default createAppContainer(InitialNavigator);
 
 const styles = StyleSheet.create({
   iconStyle: {
