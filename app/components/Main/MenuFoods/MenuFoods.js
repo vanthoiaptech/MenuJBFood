@@ -10,8 +10,8 @@ import {
   Linking,
   Alert,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import locale from 'react-native-locale-detector';
 import foodsVI from '../../../../api/foods/foods_vi';
 import foodsEN from '../../../../api/foods/foods_en';
@@ -20,10 +20,19 @@ import Food from './Food';
 import LoadMoreButton from '../LoadMoreButton';
 import i18n from '../../../utils/i18n';
 import EmptyData from '../EmptyData';
+import FoodModal from './FoodModal';
 
 const {width} = Dimensions.get('window');
 
 class MenuFoods extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isModalVisible: false,
+      imageName: 'Uni-Gunkan-Sushi.jpg',
+    };
+  }
+
   static navigationOptions = ({navigation}) => {
     return {
       title: navigation.getParam('restaurant').name,
@@ -46,7 +55,6 @@ class MenuFoods extends Component {
   };
 
   openGps = (lat, lng) => {
-    // const url = `https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination=${lat}, ${lng}`;
     const url = Platform.select({
       ios: `http://maps.apple.com/maps?daddr=${lat},${lng}`,
       android: `http://maps.google.com/maps?daddr=${lat},${lng}`,
@@ -62,6 +70,13 @@ class MenuFoods extends Component {
       .catch(error => {
         Alert.alert(error);
       });
+  };
+
+  setModalVisible = (imageName = null) => {
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
+      imageName: imageName,
+    });
   };
 
   render() {
@@ -85,7 +100,13 @@ class MenuFoods extends Component {
       <SafeAreaView style={listFoods}>
         <FlatList
           data={this.getFoodsByRestaurantId(restaurant.id)}
-          renderItem={({item, index}) => <Food food={item} index={index} />}
+          renderItem={({item, index}) => (
+            <Food
+              food={item}
+              index={index}
+              showModal={() => this.setModalVisible(item.image)}
+            />
+          )}
           keyExtractor={item => item.id.toString()}
           ListFooterComponent={
             <LoadMoreButton
@@ -100,8 +121,15 @@ class MenuFoods extends Component {
       foodsFlatList = <EmptyData />;
     }
 
+    const {imageName, isModalVisible} = this.state;
+
     return (
       <View style={container}>
+        <FoodModal
+          isModalVisible={isModalVisible}
+          imageName={imageName}
+          closeModal={() => this.setModalVisible()}
+        />
         <View style={banner}>
           <Image
             style={bannerImg}
@@ -139,6 +167,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 10,
     width: width,
+    justifyContent: 'center',
   },
   banner: {
     flex: 4,

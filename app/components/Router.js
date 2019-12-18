@@ -206,7 +206,7 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 const InitialNavigator = createSwitchNavigator({
-  Splash: Splash,
+  // Splash: Splash,
   App: DrawerNavigator,
 });
 

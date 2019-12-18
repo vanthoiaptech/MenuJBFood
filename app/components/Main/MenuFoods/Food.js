@@ -1,20 +1,22 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
-
-// const {width} = Dimensions.get('window');
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 class Food extends Component {
+  showModal = () => {
+    return this.props.showModal;
+  };
+
   render() {
     const {container, textIndex, textName, textPrice} = styles;
     const {food, index} = this.props;
     const bgColors = ['#DBF4C9', '#F1F1F1'];
     return (
       <View style={{backgroundColor: bgColors[index % bgColors.length]}}>
-        <View style={container}>
+        <TouchableOpacity style={container} onPress={this.showModal()}>
           <Text style={textIndex}>{index + 1}</Text>
           <Text style={textName}>{food.name}</Text>
           <Text style={textPrice}>{food.price}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   }
