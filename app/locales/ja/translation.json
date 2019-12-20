@@ -9,6 +9,12 @@
   "rating": {
     "title": "格付け"
   },
+  "language_setting": {
+    "title": "言語",
+    "vietnamese": "ベトナム人",
+    "english": "英語",
+    "japanese": "日本人"
+  },
   "common": {
     "empty data" : "データなし..."
   }

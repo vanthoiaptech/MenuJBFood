@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   image: {
-    width: width - 50,
+    width: width,
     height: 300,
   },
   closeIcon: {

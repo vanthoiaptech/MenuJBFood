@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import locale from 'react-native-locale-detector';
+import AsyncStorage from '@react-native-community/async-storage';
 import foodsVI from '../../../../api/foods/foods_vi';
 import foodsEN from '../../../../api/foods/foods_en';
 import foodsJA from '../../../../api/foods/foods_ja';
@@ -30,6 +31,8 @@ class MenuFoods extends Component {
     this.state = {
       isModalVisible: false,
       imageName: 'Uni-Gunkan-Sushi.jpg',
+      foods: [],
+      languageCode: '',
     };
   }
 
@@ -39,21 +42,51 @@ class MenuFoods extends Component {
     };
   };
 
+  // get language saved AsyncStorage
+  getStorangeValue = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@languageCode');
+      if (value !== null) {
+        this.setState({
+          languageCode: value,
+        });
+      }
+    } catch (error) {
+      Alert.alert(error);
+    }
+  };
+
   getFoodsByRestaurantId = id => {
     let foods = foodsJA;
-    if (locale === 'en-US') {
-      foods = foodsEN;
+    let {languageCode} = this.state;
+    let lng = languageCode;
+    if (languageCode === '') {
+      lng = locale.substr(0, 2);
     }
-    if (locale === 'vi-VN') {
+    if (lng === 'vi') {
       foods = foodsVI;
     }
+    if (lng === 'en') {
+      foods = foodsEN;
+    }
+    let tmp = [];
     return foods.filter(item => {
       if (item.restaurant_id === id) {
-        return item;
+        tmp.push(item);
+        this.setState({
+          foods: tmp,
+        });
       }
     });
   };
 
+  async componentDidMount() {
+    const {restaurant} = this.props.navigation.state.params;
+    await this.getStorangeValue();
+    this.getFoodsByRestaurantId(restaurant.id);
+  }
+
+  // open maps app redirect
   openGps = (lat, lng) => {
     const url = Platform.select({
       ios: `http://maps.apple.com/maps?daddr=${lat},${lng}`,
@@ -72,6 +105,7 @@ class MenuFoods extends Component {
       });
   };
 
+  // set show and hide food modal
   setModalVisible = (imageName = null) => {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
@@ -93,13 +127,14 @@ class MenuFoods extends Component {
       addressText,
       openText,
     } = styles;
+    const {foods} = this.state;
     const {restaurant} = this.props.navigation.state.params;
 
     // Foods list
     let foodsFlatList = (
       <SafeAreaView style={listFoods}>
         <FlatList
-          data={this.getFoodsByRestaurantId(restaurant.id)}
+          data={foods}
           renderItem={({item, index}) => (
             <Food
               food={item}
@@ -108,16 +143,12 @@ class MenuFoods extends Component {
             />
           )}
           keyExtractor={item => item.id.toString()}
-          ListFooterComponent={
-            <LoadMoreButton
-              lengthData={this.getFoodsByRestaurantId(restaurant.id).length}
-            />
-          }
+          ListFooterComponent={<LoadMoreButton lengthData={foods.length} />}
         />
       </SafeAreaView>
     );
 
-    if (this.getFoodsByRestaurantId(restaurant.id).length === 0) {
+    if (foods.length === 0) {
       foodsFlatList = <EmptyData />;
     }
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import {Image, StyleSheet, View, Dimensions} from 'react-native';
 import {createBottomTabNavigator, BottomTabBar} from 'react-navigation-tabs';
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
+import {createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
+import {withNamespaces} from 'react-i18next';
 import {Icon} from 'react-native-elements';
 import Categories from './Main/Categories/Categories';
 import Maps from './Main/Maps/Maps';
@@ -13,7 +14,6 @@ import MenuFoods from './Main/MenuFoods/MenuFoods';
 import Menu from './Main/Menu/Menu';
 import Splash from './Splash';
 import LanguageSetting from './Main/LanguageSetting/LanguageSetting';
-import i18n from '../utils/i18n';
 
 const {width} = Dimensions.get('window');
 // customize header react navigation
@@ -70,9 +70,9 @@ const CategoryStack = createStackNavigator(
   {
     CategoriesScreen: {
       screen: Categories,
-      navigationOptions: {
-        title: i18n.t('categories:title'),
-      },
+      navigationOptions: ({navigation, screenProps}) => ({
+        title: screenProps.t('categories:title'),
+      }),
     },
     ListRestaurantsScreen: {
       screen: ListRestaurants,
@@ -89,9 +89,9 @@ const MapsStack = createStackNavigator(
   {
     MapsScreen: {
       screen: Maps,
-      navigationOptions: {
-        title: i18n.t('maps:title'),
-      },
+      navigationOptions: ({navigation, screenProps}) => ({
+        title: screenProps.t('maps:title'),
+      }),
     },
     MenuFoodsScreen: {
       screen: MenuFoods,
@@ -105,9 +105,9 @@ const RatingStack = createStackNavigator(
   {
     RatingScreen: {
       screen: Rating,
-      navigationOptions: {
-        title: i18n.t('rating:title'),
-      },
+      navigationOptions: ({navigation, screenProps}) => ({
+        title: screenProps.t('rating:title'),
+      }),
     },
   },
   {...headerStyleCommon},
@@ -118,9 +118,9 @@ const LanguageSettingStack = createStackNavigator(
   {
     LanguageSettingScreen: {
       screen: LanguageSetting,
-      navigationOptions: {
-        title: 'Change language',
-      },
+      navigationOptions: ({navigation, screenProps}) => ({
+        title: screenProps.t('language_setting:title'),
+      }),
     },
   },
   {...headerStyleCommon},
@@ -132,39 +132,39 @@ const TabNavigation = createBottomTabNavigator(
   {
     Maps: {
       screen: MapsStack,
-      navigationOptions: {
-        tabBarLabel: i18n.t('maps:title'),
+      navigationOptions: ({navigation, screenProps}) => ({
+        tabBarLabel: screenProps.t('maps:title'),
         tabBarIcon: () => (
           <Image
             source={require('../images/logo_trang.png')}
             style={styles.iconStyle}
           />
         ),
-      },
+      }),
     },
     Categories: {
       screen: CategoryStack,
-      navigationOptions: {
-        tabBarLabel: i18n.t('categories:title'),
+      navigationOptions: ({navigation, screenProps}) => ({
+        tabBarLabel: screenProps.t('categories:title'),
         tabBarIcon: () => (
           <Image
             source={require('../images/logo_trang.png')}
             style={styles.iconStyle}
           />
         ),
-      },
+      }),
     },
     Rating: {
       screen: RatingStack,
-      navigationOptions: {
-        tabBarLabel: i18n.t('rating:title'),
+      navigationOptions: ({navigation, screenProps}) => ({
+        tabBarLabel: screenProps.t('rating:title'),
         tabBarIcon: () => (
           <Image
             source={require('../images/logo_trang.png')}
             style={styles.iconStyle}
           />
         ),
-      },
+      }),
     },
   },
   {
@@ -206,11 +206,13 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 const InitialNavigator = createSwitchNavigator({
-  // Splash: Splash,
+  Splash: Splash,
   App: DrawerNavigator,
 });
 
-export default createAppContainer(InitialNavigator);
+export default withNamespaces(['language_setting', 'common'], {wait: true})(
+  InitialNavigator,
+);
 
 const styles = StyleSheet.create({
   iconStyle: {

@@ -9,7 +9,13 @@
   "rating": {
     "title": "Rating"
   },
+  "language_setting": {
+    "title": "Language",
+    "vietnamese": "Vietnamese",
+    "english": "English",
+    "japanese": "Japanese"
+  },
   "common": {
-    "empty data" : "No data available..."
+    "empty data": "No data available..."
   }
 }

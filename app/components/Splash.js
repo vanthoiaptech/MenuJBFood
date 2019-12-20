@@ -11,7 +11,7 @@ class Splash extends Component {
     );
   };
 
-  // action redirect to App after delay 2s
+  // action redirect to App after 2s
   async componentDidMount() {
     const data = await this.performTimeConsumingTask();
     if (data !== null) {

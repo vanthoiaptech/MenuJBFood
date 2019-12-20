@@ -1,36 +1,45 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  NativeModules,
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import i18n from '../../../utils/i18n';
+import {withNamespaces} from 'react-i18next';
 
 class LanguageSetting extends Component {
   async onChangeLanguage(lang) {
     i18n.changeLanguage(lang);
     try {
-      await AsyncStorage.setItem('@APP:languageCode', lang);
+      await AsyncStorage.setItem('@languageCode', lang);
     } catch (error) {
-      Alert.alert(error);
+      console.log(error);
     }
-    console.log(i18n.dir());
+    NativeModules.DevSettings.reload();
   }
+
   render() {
     const {container, item} = styles;
+    const {t} = this.props;
     return (
       <View style={container}>
         <TouchableOpacity
           style={item}
           onPress={() => this.onChangeLanguage('en')}>
-          <Text>English</Text>
+          <Text>{t('language_setting:english')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={item}
           onPress={() => this.onChangeLanguage('vi')}>
-          <Text>Tiếng Việt</Text>
+          <Text>{t('language_setting:vietnamese')}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={item}
           onPress={() => this.onChangeLanguage('ja')}>
-          <Text>日本語</Text>
+          <Text>{t('language_setting:japanese')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -48,4 +57,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LanguageSetting;
+export default withNamespaces(['language_setting', 'common'], {wait: true})(
+  LanguageSetting,
+);

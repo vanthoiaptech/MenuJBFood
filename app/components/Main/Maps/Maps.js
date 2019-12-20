@@ -12,6 +12,7 @@ import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import locale from 'react-native-locale-detector';
+import AsyncStorage from '@react-native-community/async-storage';
 import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
 import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
 import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
@@ -23,23 +24,51 @@ const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 class Maps extends Component {
   constructor(props) {
-    let listRestaurants = listRestaurantsJA;
-    if (locale === 'en-US') {
-      listRestaurants = listRestaurantsEN;
-    }
-    if (locale === 'vi-VN') {
-      listRestaurants = listRestaurantsVI;
-    }
     super(props);
     this.state = {
-      listRestaurants,
+      listRestaurants: [],
       marginTop: 0,
+      languageCode: '',
     };
   }
 
-  componentDidMount() {
+  // get language saved AsyncStorage
+  getStorangeValue = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@languageCode');
+      if (value !== null) {
+        this.setState({
+          languageCode: value,
+        });
+      }
+    } catch (error) {
+      Alert.alert(error);
+    }
+  };
+
+  getListRestaurants = () => {
+    let listRestaurants = listRestaurantsJA;
+    let {languageCode} = this.state;
+    let lng = languageCode;
+    if (languageCode === '') {
+      lng = locale.substr(0, 2);
+    }
+    if (lng === 'vi') {
+      listRestaurants = listRestaurantsVI;
+    }
+    if (lng === 'en') {
+      listRestaurants = listRestaurantsEN;
+    }
+    this.setState({
+      listRestaurants: listRestaurants,
+    });
+  };
+
+  async componentDidMount() {
     setTimeout(() => this.setState({marginTop: -1}), 500);
     this.requestLocationPermission();
+    await this.getStorangeValue();
+    this.getListRestaurants();
   }
 
   requestLocationPermission = async () => {

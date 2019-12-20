@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {withNamespaces} from 'react-i18next';
 
 class Menu extends Component {
   render() {
     const {container, menuItem} = styles;
-    const {navigation} = this.props;
+    const {navigation, t} = this.props;
     return (
       <View style={container}>
         <TouchableOpacity
           style={menuItem}
           onPress={() => navigation.navigate('LanguageSetting')}>
-          <Text>Language setting</Text>
+          <Text>{t('language_setting:title')}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={menuItem}>
           <Text>About us</Text>
@@ -32,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Menu;
+export default withNamespaces(['language_setting'], {wait: true})(Menu);

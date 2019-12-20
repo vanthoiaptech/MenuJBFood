@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import {SafeAreaView, StyleSheet, FlatList, Alert} from 'react-native';
 import Category from './Category';
 import LoadMoreButton from '../LoadMoreButton';
 import EmptyData from '../EmptyData';
@@ -7,18 +7,59 @@ import locale from 'react-native-locale-detector';
 import categoriesVI from '../../../../api/categories/categories_vi';
 import categoriesEN from '../../../../api/categories/categories_en';
 import categoriesJA from '../../../../api/categories/categories_ja';
+import AsyncStorage from '@react-native-community/async-storage';
+import {withNamespaces} from 'react-i18next';
 
 class Categories extends Component {
-  render() {
-    const {container, listCategories} = styles;
-    const {navigation} = this.props;
-    let categories = categoriesJA;
-    if (locale === 'en-US') {
-      categories = categoriesEN;
+  constructor(props) {
+    super(props);
+    this.state = {
+      languageCode: '',
+      categories: [],
+    };
+  }
+
+  // get language saved AsyncStorage
+  getStorangeValue = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@languageCode');
+      if (value !== null) {
+        this.setState({
+          languageCode: value,
+        });
+      }
+    } catch (error) {
+      Alert.alert(error);
     }
-    if (locale === 'vi-VN') {
+  };
+
+  getCategoriesData = () => {
+    let categories = categoriesJA;
+    let {languageCode} = this.state;
+    let lng = languageCode;
+    if (languageCode === '') {
+      lng = locale.substr(0, 2);
+    }
+    if (lng === 'vi') {
       categories = categoriesVI;
     }
+    if (lng === 'en') {
+      categories = categoriesEN;
+    }
+    this.setState({
+      categories: categories,
+    });
+  };
+
+  async componentDidMount() {
+    await this.getStorangeValue();
+    this.getCategoriesData();
+  }
+
+  render() {
+    const {categories} = this.state;
+    const {container, listCategories} = styles;
+    const {navigation} = this.props;
 
     if (categories.length <= 0) {
       return <EmptyData />;
@@ -55,4 +96,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Categories;
+export default withNamespaces(['categories', 'common'], {wait: true})(
+  Categories,
+);

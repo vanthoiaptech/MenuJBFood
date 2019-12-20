@@ -9,6 +9,12 @@
   "rating": {
     "title": "Đánh giá"
   },
+  "language_setting": {
+    "title": "Ngôn ngữ",
+    "vietnamese": "Tiếng Việt",
+    "english": "Tiếng Anh",
+    "japanese": "Tiếng Nhật"
+  },
   "common": {
     "empty data" : "Không có dữ liệu..."
   }

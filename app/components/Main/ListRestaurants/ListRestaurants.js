@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {FlatList, SafeAreaView} from 'react-native';
+import {FlatList, SafeAreaView, Alert} from 'react-native';
 import locale from 'react-native-locale-detector';
+import AsyncStorage from '@react-native-community/async-storage';
 import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
 import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
 import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
@@ -9,47 +10,81 @@ import LoadMoreButton from '../LoadMoreButton';
 import EmptyData from '../EmptyData';
 
 class ListRestaurants extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      languageCode: '',
+      listRestaurants: [],
+    };
+  }
+
   static navigationOptions = ({navigation}) => {
     return {
       title: navigation.getParam('categoryName'),
     };
   };
 
+  // get language saved AsyncStorage
+  getStorangeValue = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@languageCode');
+      if (value !== null) {
+        this.setState({
+          languageCode: value,
+        });
+      }
+    } catch (error) {
+      Alert.alert(error);
+    }
+  };
+
   getListRestaurantsByCategoryId = id => {
     let listRestaurants = listRestaurantsJA;
-    if (locale === 'en-US') {
-      listRestaurants = listRestaurantsEN;
+    let {languageCode} = this.state;
+    let lng = languageCode;
+    if (languageCode === '') {
+      lng = locale.substr(0, 2);
     }
-    if (locale === 'vi-VN') {
+    if (lng === 'vi') {
       listRestaurants = listRestaurantsVI;
     }
+    if (lng === 'en') {
+      listRestaurants = listRestaurantsEN;
+    }
+    let tmp = [];
     return listRestaurants.filter(item => {
       if (item.category_id === id) {
-        return item;
+        tmp.push(item);
+        this.setState({
+          listRestaurants: tmp,
+        });
       }
     });
   };
 
+  async componentDidMount() {
+    const {categoryId} = this.props.navigation.state.params;
+    await this.getStorangeValue();
+    this.getListRestaurantsByCategoryId(categoryId);
+  }
+
   render() {
     const {navigation} = this.props;
-    const {categoryId} = this.props.navigation.state.params;
-    if (this.getListRestaurantsByCategoryId(categoryId).length <= 0) {
+    const {listRestaurants} = this.state;
+
+    if (listRestaurants.length <= 0) {
       return <EmptyData />;
     }
     return (
       <SafeAreaView>
         <FlatList
-          data={this.getListRestaurantsByCategoryId(categoryId)}
+          data={listRestaurants}
           renderItem={({item}) => (
             <Restaurant restaurant={item} navigation={navigation} />
           )}
           keyExtractor={item => item.id.toString()}
           ListFooterComponent={
-            <LoadMoreButton
-              lengthData={
-                this.getListRestaurantsByCategoryId(categoryId).length
-              }
-            />
+            <LoadMoreButton lengthData={listRestaurants.length} />
           }
         />
       </SafeAreaView>
