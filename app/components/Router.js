@@ -169,6 +169,7 @@ const TabNavigation = createBottomTabNavigator(
   },
   {
     initialRouteName: 'Categories',
+    tabBarPosition: 'bottom',
     tabBarOptions: {
       inactiveBackgroundColor: '#54A121',
       activeBackgroundColor: '#C23017',
@@ -206,7 +207,7 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 const InitialNavigator = createSwitchNavigator({
-  Splash: Splash,
+  // Splash: Splash,
   App: DrawerNavigator,
 });
 

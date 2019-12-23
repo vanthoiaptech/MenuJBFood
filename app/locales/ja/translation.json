@@ -11,9 +11,12 @@
   },
   "language_setting": {
     "title": "言語",
+    "select language": "言語を選択する",
     "vietnamese": "ベトナム人",
     "english": "英語",
-    "japanese": "日本人"
+    "japanese": "日本人",
+    "cancel": "取り消す",
+    "done": "完了"
   },
   "common": {
     "empty data" : "データなし..."

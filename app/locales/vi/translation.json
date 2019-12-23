@@ -11,9 +11,12 @@
   },
   "language_setting": {
     "title": "Ngôn ngữ",
+    "select language": "Chọn ngôn ngữ",
     "vietnamese": "Tiếng Việt",
     "english": "Tiếng Anh",
-    "japanese": "Tiếng Nhật"
+    "japanese": "Tiếng Nhật",
+    "cancel": "Hủy",
+    "done": "Xong"
   },
   "common": {
     "empty data" : "Không có dữ liệu..."

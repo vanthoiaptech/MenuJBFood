@@ -11,9 +11,12 @@
   },
   "language_setting": {
     "title": "Language",
+    "select language": "Select language",
     "vietnamese": "Vietnamese",
     "english": "English",
-    "japanese": "Japanese"
+    "japanese": "Japanese",
+    "cancel": "Cancel",
+    "done": "Done"
   },
   "common": {
     "empty data": "No data available..."
