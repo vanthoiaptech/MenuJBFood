@@ -7,11 +7,10 @@
     "title": "Bản đồ"
   },
   "rating": {
-    "title": "Đánh giá"
+    "title": "Về chúng tôi"
   },
   "language_setting": {
-    "title": "Ngôn ngữ",
-    "select language": "Chọn ngôn ngữ",
+    "title": "Chọn ngôn ngữ",
     "vietnamese": "Tiếng Việt",
     "english": "Tiếng Anh",
     "japanese": "Tiếng Nhật",

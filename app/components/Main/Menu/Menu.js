@@ -3,19 +3,57 @@ import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {withNamespaces} from 'react-i18next';
 import {Icon} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-import LanguageSetting from './LanguageSetting';
+import AsyncStorage from '@react-native-community/async-storage';
+import i18n from '../../../utils/i18n';
+import RNRestart from 'react-native-restart';
 
 class Menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalVisible: false,
+      languageCode: '',
     };
   }
 
-  toggleModal = () => {
-    this.setState({isModalVisible: !this.state.isModalVisible});
+  async onChangeLanguage(lang) {
+    i18n.changeLanguage(lang);
+    try {
+      await AsyncStorage.setItem('@languageCode', lang);
+    } catch (error) {
+      console.log(error);
+    }
+    RNRestart.Restart();
+  }
+
+  // show check on select language
+  showChecked = lng => {
+    if (this.state.languageCode === lng) {
+      return (
+        <View style={styles.checkIcon}>
+          <Icon name="check" color="#00557F" />
+        </View>
+      );
+    } else {
+      return null;
+    }
   };
+
+  getStorangeValue = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@languageCode');
+      if (value !== null) {
+        this.setState({
+          languageCode: value,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  componentDidMount() {
+    this.getStorangeValue();
+  }
 
   render() {
     const {
@@ -26,15 +64,11 @@ class Menu extends Component {
       logoMenu,
       menuWrapper,
       text,
+      ensignIcon,
     } = styles;
     const {t} = this.props;
-    const {isModalVisible} = this.state;
     return (
       <View style={container}>
-        <LanguageSetting
-          visible={isModalVisible}
-          closeModal={() => this.toggleModal()}
-        />
         <LinearGradient
           start={{x: 0.0, y: 0.25}}
           end={{x: 1, y: 3.0}}
@@ -49,9 +83,39 @@ class Menu extends Component {
           <Text style={text}>レストランメニュー</Text>
         </LinearGradient>
         <View style={menuWrapper}>
-          <TouchableOpacity style={menuItem} onPress={() => this.toggleModal()}>
+          <View style={menuItem}>
             <Icon name="language" />
             <Text style={menuText}>{t('language_setting:title')}</Text>
+          </View>
+          <TouchableOpacity
+            style={menuItem}
+            onPress={() => this.onChangeLanguage('ja')}>
+            <Image
+              style={ensignIcon}
+              source={require('../../../images/icon/japan.png')}
+            />
+            <Text style={menuText}>{t('language_setting:japanese')}</Text>
+            {this.showChecked('ja')}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={menuItem}
+            onPress={() => this.onChangeLanguage('vi')}>
+            <Image
+              style={ensignIcon}
+              source={require('../../../images/icon/vietnam.png')}
+            />
+            <Text style={menuText}>{t('language_setting:vietnamese')}</Text>
+            {this.showChecked('vi')}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={menuItem}
+            onPress={() => this.onChangeLanguage('en')}>
+            <Image
+              style={ensignIcon}
+              source={require('../../../images/icon/united-kingdom.png')}
+            />
+            <Text style={menuText}>{t('language_setting:english')}</Text>
+            {this.showChecked('en')}
           </TouchableOpacity>
         </View>
       </View>
@@ -77,8 +141,13 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
   },
+  checkIcon: {
+    flex: 2,
+  },
   menuText: {
-    paddingLeft: 5,
+    paddingLeft: 10,
+    paddingVertical: 5,
+    flex: 8,
   },
   logoMenu: {
     width: 80,
@@ -88,6 +157,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#FFF',
+  },
+  ensignIcon: {
+    flex: 1,
+    width: 25,
+    height: 20,
   },
 });
 

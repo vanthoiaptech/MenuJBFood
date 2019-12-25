@@ -7,11 +7,10 @@
     "title": "Maps"
   },
   "rating": {
-    "title": "Rating"
+    "title": "About us"
   },
   "language_setting": {
-    "title": "Language",
-    "select language": "Select language",
+    "title": "Select language",
     "vietnamese": "Vietnamese",
     "english": "English",
     "japanese": "Japanese",

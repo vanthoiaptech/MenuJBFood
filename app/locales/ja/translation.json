@@ -7,11 +7,10 @@
     "title": "地図"
   },
   "rating": {
-    "title": "格付け"
+    "title": "私たちに関しては"
   },
   "language_setting": {
-    "title": "言語",
-    "select language": "言語を選択する",
+    "title": "言語を選択する",
     "vietnamese": "ベトナム人",
     "english": "英語",
     "japanese": "日本人",
