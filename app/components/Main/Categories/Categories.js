@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, FlatList, Alert} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  Alert,
+  RefreshControl,
+} from 'react-native';
 import Category from './Category';
-import LoadMoreButton from '../LoadMoreButton';
 import EmptyData from '../EmptyData';
 import locale from 'react-native-locale-detector';
 import categoriesVI from '../../../../api/categories/categories_vi';
@@ -16,6 +21,7 @@ class Categories extends Component {
     this.state = {
       languageCode: '',
       categories: [],
+      refreshing: false,
     };
   }
 
@@ -34,6 +40,9 @@ class Categories extends Component {
   };
 
   getCategoriesData = () => {
+    this.setState({
+      refreshing: true,
+    });
     let categories = categoriesJA;
     let {languageCode} = this.state;
     let lng = languageCode;
@@ -48,6 +57,7 @@ class Categories extends Component {
     }
     this.setState({
       categories: categories,
+      refreshing: false,
     });
   };
 
@@ -56,8 +66,12 @@ class Categories extends Component {
     this.getCategoriesData();
   }
 
+  onRefresh = () => {
+    this.getCategoriesData();
+  };
+
   render() {
-    const {categories} = this.state;
+    const {categories, refreshing} = this.state;
     const {container, listCategories} = styles;
     const {navigation} = this.props;
 
@@ -74,8 +88,11 @@ class Categories extends Component {
             <Category navigation={navigation} category={item} index={index} />
           )}
           keyExtractor={item => item.id.toString()}
-          ListFooterComponent={
-            <LoadMoreButton lengthData={categories.length} />
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this.onRefresh}
+            />
           }
         />
       </SafeAreaView>

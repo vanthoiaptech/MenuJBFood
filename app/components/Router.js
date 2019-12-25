@@ -8,7 +8,7 @@ import {withNamespaces} from 'react-i18next';
 import {Icon} from 'react-native-elements';
 import Categories from './Main/Categories/Categories';
 import Maps from './Main/Maps/Maps';
-import Rating from './Main/Rating/Rating';
+import About from './Main/About/About';
 import ListRestaurants from './Main/ListRestaurants/ListRestaurants';
 import MenuFoods from './Main/MenuFoods/MenuFoods';
 import Menu from './Main/Menu/Menu';
@@ -100,13 +100,13 @@ const MapsStack = createStackNavigator(
   {...headerStyleCommon},
 );
 
-// route rating
-const RatingStack = createStackNavigator(
+// route about us
+const AboutStack = createStackNavigator(
   {
-    RatingScreen: {
-      screen: Rating,
+    AboutScreen: {
+      screen: About,
       navigationOptions: ({navigation, screenProps}) => ({
-        title: screenProps.t('rating:title'),
+        title: screenProps.t('about:title'),
       }),
     },
   },
@@ -154,10 +154,10 @@ const TabNavigation = createBottomTabNavigator(
         ),
       }),
     },
-    Rating: {
-      screen: RatingStack,
+    About: {
+      screen: AboutStack,
       navigationOptions: ({navigation, screenProps}) => ({
-        tabBarLabel: screenProps.t('rating:title'),
+        tabBarLabel: screenProps.t('about:title'),
         tabBarIcon: () => (
           <Image
             source={require('../images/logo_trang.png')}

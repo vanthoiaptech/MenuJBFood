@@ -42,7 +42,7 @@ class Maps extends Component {
         });
       }
     } catch (error) {
-      Alert.alert(error);
+      console.log(error);
     }
   };
 
@@ -123,7 +123,7 @@ class Maps extends Component {
               }}>
               <Image
                 style={imageMarker}
-                source={require('../../../images/icon/marker.png')}
+                source={require('../../../images/LOGO.png')}
                 tintColor="#DD3624"
               />
               <Callout
@@ -148,13 +148,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   imageMarker: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     resizeMode: 'center',
   },
   titleMarker: {
-    fontSize: 12,
-    width: 100,
+    fontSize: 16,
+    width: 200,
+    fontWeight: 'bold',
   },
 });
 

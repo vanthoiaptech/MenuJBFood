@@ -6,14 +6,21 @@
   "maps": {
     "title": "地図"
   },
-  "rating": {
-    "title": "私たちに関しては"
+  "about": {
+    "title": "私たちに関しては",
+    "company": "会社",
+    "address": "住所",
+    "phone": "電話",
+    "email": "メール",
+    "website": "サイト",
+    "Jbannet Asia Company Limited": "Jbannet Asia Company Limited",
+    "105, Le Loi, Hai Chau, Da Nang": "105, Le Loi, Hai Chau, Da Nang"
   },
   "language_setting": {
     "title": "言語を選択する",
-    "vietnamese": "ベトナム人",
+    "vietnamese": "ベトナム語",
     "english": "英語",
-    "japanese": "日本人",
+    "japanese": "日本語",
     "cancel": "取り消す",
     "done": "完了"
   },

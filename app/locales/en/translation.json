@@ -6,8 +6,15 @@
   "maps": {
     "title": "Maps"
   },
-  "rating": {
-    "title": "About us"
+  "about": {
+    "title": "About us",
+    "company": "Company",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "website": "Website",
+    "Jbannet Asia Company Limited": "Jbannet Asia Company Limited",
+    "105, Le Loi, Hai Chau, Da Nang": "105, Le Loi, Hai Chau, Da Nang"
   },
   "language_setting": {
     "title": "Select language",

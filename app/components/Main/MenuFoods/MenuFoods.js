@@ -18,7 +18,6 @@ import foodsVI from '../../../../api/foods/foods_vi';
 import foodsEN from '../../../../api/foods/foods_en';
 import foodsJA from '../../../../api/foods/foods_ja';
 import Food from './Food';
-import LoadMoreButton from '../LoadMoreButton';
 import i18n from '../../../utils/i18n';
 import EmptyData from '../EmptyData';
 import FoodModal from './FoodModal';
@@ -97,7 +96,7 @@ class MenuFoods extends Component {
         if (supported) {
           return Linking.openURL(url);
         } else {
-          console.log("Can't handle url: " + url);
+          console.log('Can not handle url: ' + url);
         }
       })
       .catch(error => {
@@ -143,7 +142,6 @@ class MenuFoods extends Component {
             />
           )}
           keyExtractor={item => item.id.toString()}
-          ListFooterComponent={<LoadMoreButton lengthData={foods.length} />}
         />
       </SafeAreaView>
     );

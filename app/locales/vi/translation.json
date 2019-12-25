@@ -6,8 +6,15 @@
   "maps": {
     "title": "Bản đồ"
   },
-  "rating": {
-    "title": "Về chúng tôi"
+  "about": {
+    "title": "Về chúng tôi",
+    "company": "Công ty",
+    "address": "Địa chỉ",
+    "phone": "Số điện thoại",
+    "email": "Email",
+    "website": "Website",
+    "Jbannet Asia Company Limited": "Công ty TNHH Jbannet Asia",
+    "105, Le Loi, Hai Chau, Da Nang": "105, Lê Lợi, Hải Châu, Đà Nẵng"
   },
   "language_setting": {
     "title": "Chọn ngôn ngữ",

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {FlatList, SafeAreaView, Alert} from 'react-native';
+import {FlatList, SafeAreaView, Alert, RefreshControl} from 'react-native';
 import locale from 'react-native-locale-detector';
 import AsyncStorage from '@react-native-community/async-storage';
 import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
 import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
 import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
 import Restaurant from './Restaurant';
-import LoadMoreButton from '../LoadMoreButton';
 import EmptyData from '../EmptyData';
 
 class ListRestaurants extends Component {
@@ -15,6 +14,7 @@ class ListRestaurants extends Component {
     this.state = {
       languageCode: '',
       listRestaurants: [],
+      refreshing: false,
     };
   }
 
@@ -68,9 +68,13 @@ class ListRestaurants extends Component {
     this.getListRestaurantsByCategoryId(categoryId);
   }
 
+  onRefresh = () => {
+    this.getListRestaurantsByCategoryId();
+  };
+
   render() {
     const {navigation} = this.props;
-    const {listRestaurants} = this.state;
+    const {listRestaurants, refreshing} = this.state;
 
     if (listRestaurants.length <= 0) {
       return <EmptyData />;
@@ -83,8 +87,11 @@ class ListRestaurants extends Component {
             <Restaurant restaurant={item} navigation={navigation} />
           )}
           keyExtractor={item => item.id.toString()}
-          ListFooterComponent={
-            <LoadMoreButton lengthData={listRestaurants.length} />
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this.onRefresh}
+            />
           }
         />
       </SafeAreaView>

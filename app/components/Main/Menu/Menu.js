@@ -27,15 +27,14 @@ class Menu extends Component {
 
   // show check on select language
   showChecked = lng => {
-    if (this.state.languageCode === lng) {
-      return (
-        <View style={styles.checkIcon}>
-          <Icon name="check" color="#00557F" />
-        </View>
-      );
-    } else {
+    if (this.state.languageCode !== lng) {
       return null;
     }
+    return (
+      <View style={styles.checkIcon}>
+        <Icon name="check" color="#00557F" />
+      </View>
+    );
   };
 
   getStorangeValue = async () => {
@@ -83,10 +82,6 @@ class Menu extends Component {
           <Text style={text}>レストランメニュー</Text>
         </LinearGradient>
         <View style={menuWrapper}>
-          <View style={menuItem}>
-            <Icon name="language" />
-            <Text style={menuText}>{t('language_setting:title')}</Text>
-          </View>
           <TouchableOpacity
             style={menuItem}
             onPress={() => this.onChangeLanguage('ja')}>
