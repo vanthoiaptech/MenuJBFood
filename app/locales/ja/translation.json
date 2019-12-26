@@ -4,7 +4,8 @@
     "business hours": "営業時間"
   },
   "maps": {
-    "title": "地図"
+    "title": "地図",
+    "see more": "もっと見る..."
   },
   "about": {
     "title": "私たちに関しては",
@@ -13,8 +14,8 @@
     "phone": "電話",
     "email": "メール",
     "website": "サイト",
-    "Jbannet Asia Company Limited": "Jbannet Asia Company Limited",
-    "105, Le Loi, Hai Chau, Da Nang": "105, Le Loi, Hai Chau, Da Nang"
+    "Jbannet Asia Company Limited": "JIBANNET ASIA CO., LTD",
+    "place": "105, Le Loi, Hai Chau, Da Nang"
   },
   "language_setting": {
     "title": "言語を選択する",

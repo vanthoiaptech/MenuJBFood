@@ -14,7 +14,7 @@ const languageDetector = {
   async: true,
   detect: async callback => {
     const savedDataJSON = await AsyncStorage.getItem(STORAGE_KEY);
-    const lng = savedDataJSON ? savedDataJSON : null;
+    const lng = savedDataJSON ? savedDataJSON : 'ja';
     const selectLanguage = lng || locale;
     callback(selectLanguage);
   },

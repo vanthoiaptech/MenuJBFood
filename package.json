@@ -17,6 +17,7 @@
     "react": "16.9.0",
     "react-i18next": "^9.0.10",
     "react-native": "0.61.5",
+    "react-native-android-location-services-dialog-box": "^2.8.2",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.5.2",
     "react-native-linear-gradient": "^2.5.6",

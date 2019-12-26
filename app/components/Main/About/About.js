@@ -43,12 +43,10 @@ class About extends Component {
             </View>
           </View>
           <View style={contentItem}>
-            <Icon name="home" type="font-awesome" color="#001F5F" />
+            <Icon name="map-marker" type="font-awesome" color="#001F5F" />
             <View style={textWrapper}>
               <Text style={title}>{t('about:address')}</Text>
-              <Text style={text}>
-                {t('about:105, Le Loi, Hai Chau, Da Nang')}
-              </Text>
+              <Text style={text}>{t('about:place')}</Text>
             </View>
           </View>
           <View style={contentItem}>

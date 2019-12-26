@@ -12,7 +12,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import locale from 'react-native-locale-detector';
+// import locale from 'react-native-locale-detector';
 import AsyncStorage from '@react-native-community/async-storage';
 import foodsVI from '../../../../api/foods/foods_vi';
 import foodsEN from '../../../../api/foods/foods_en';
@@ -58,14 +58,13 @@ class MenuFoods extends Component {
   getFoodsByRestaurantId = id => {
     let foods = foodsJA;
     let {languageCode} = this.state;
-    let lng = languageCode;
-    if (languageCode === '') {
-      lng = locale.substr(0, 2);
-    }
-    if (lng === 'vi') {
+    // if (languageCode === '') {
+    //   languageCode = locale.substr(0, 2);
+    // }
+    if (languageCode === 'vi') {
       foods = foodsVI;
     }
-    if (lng === 'en') {
+    if (languageCode === 'en') {
       foods = foodsEN;
     }
     let tmp = [];
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
     width: width,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    opacity: 0.8,
+    opacity: 0.7,
   },
   contentButton: {
     flex: 10,

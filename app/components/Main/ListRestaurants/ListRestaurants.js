@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {FlatList, SafeAreaView, Alert, RefreshControl} from 'react-native';
-import locale from 'react-native-locale-detector';
+// import locale from 'react-native-locale-detector';
 import AsyncStorage from '@react-native-community/async-storage';
 import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
 import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
@@ -41,14 +41,13 @@ class ListRestaurants extends Component {
   getListRestaurantsByCategoryId = id => {
     let listRestaurants = listRestaurantsJA;
     let {languageCode} = this.state;
-    let lng = languageCode;
-    if (languageCode === '') {
-      lng = locale.substr(0, 2);
-    }
-    if (lng === 'vi') {
+    // if (languageCode === '') {
+    //   languageCode = locale.substr(0, 2);
+    // }
+    if (languageCode === 'vi') {
       listRestaurants = listRestaurantsVI;
     }
-    if (lng === 'en') {
+    if (languageCode === 'en') {
       listRestaurants = listRestaurantsEN;
     }
     let tmp = [];

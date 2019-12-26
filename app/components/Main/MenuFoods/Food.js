@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 
 class Food extends Component {
   showModal = () => {
@@ -7,13 +7,29 @@ class Food extends Component {
   };
 
   render() {
-    const {container, textIndex, textName, textPrice} = styles;
+    const {
+      container,
+      textIndex,
+      textName,
+      textPrice,
+      imageWrapper,
+      image,
+    } = styles;
     const {food, index} = this.props;
     const bgColors = ['#DBF4C9', '#F1F1F1'];
+    const imageFood = food.image;
     return (
       <View style={{backgroundColor: bgColors[index % bgColors.length]}}>
         <TouchableOpacity style={container} onPress={this.showModal()}>
           <Text style={textIndex}>{index + 1}</Text>
+          <View style={imageWrapper}>
+            <Image
+              source={{
+                uri: `https://kyotosushi.vn/wp-content/uploads/2018/11/${imageFood}`,
+              }}
+              style={image}
+            />
+          </View>
           <Text style={textName}>{food.name}</Text>
           <Text style={textPrice}>{food.price}</Text>
         </TouchableOpacity>
@@ -25,7 +41,6 @@ class Food extends Component {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingVertical: 8,
     flex: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -33,20 +48,29 @@ const styles = StyleSheet.create({
   textIndex: {
     color: '#848484',
     fontSize: 13,
-    flex: 2,
+    flex: 1,
     textAlign: 'center',
+  },
+  imageWrapper: {
+    flex: 2,
+    alignItems: 'center',
+  },
+  image: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
   },
   textName: {
     color: '#848484',
     fontSize: 13,
     textAlign: 'left',
     flexWrap: 'wrap',
-    flex: 6,
+    flex: 5,
   },
   textPrice: {
     color: '#848484',
     fontSize: 13,
-    flex: 3,
+    flex: 2,
     textAlign: 'center',
   },
 });

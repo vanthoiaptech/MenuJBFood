@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Category from './Category';
 import EmptyData from '../EmptyData';
-import locale from 'react-native-locale-detector';
+// import locale from 'react-native-locale-detector';
 import categoriesVI from '../../../../api/categories/categories_vi';
 import categoriesEN from '../../../../api/categories/categories_en';
 import categoriesJA from '../../../../api/categories/categories_ja';
@@ -45,14 +45,13 @@ class Categories extends Component {
     });
     let categories = categoriesJA;
     let {languageCode} = this.state;
-    let lng = languageCode;
-    if (languageCode === '') {
-      lng = locale.substr(0, 2);
-    }
-    if (lng === 'vi') {
+    // if (languageCode === '') {
+    //   languageCode = locale.substr(0, 2);
+    // }
+    if (languageCode === 'vi') {
       categories = categoriesVI;
     }
-    if (lng === 'en') {
+    if (languageCode === 'en') {
       categories = categoriesEN;
     }
     this.setState({

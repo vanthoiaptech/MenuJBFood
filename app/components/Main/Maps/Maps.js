@@ -4,18 +4,19 @@ import {
   StyleSheet,
   Text,
   Image,
-  Alert,
   Platform,
   Dimensions,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS} from 'react-native-permissions';
-import locale from 'react-native-locale-detector';
+// import locale from 'react-native-locale-detector';
 import AsyncStorage from '@react-native-community/async-storage';
 import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
 import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
 import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
+import {Icon} from 'react-native-elements';
+import {withNamespaces} from 'react-i18next';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -49,14 +50,13 @@ class Maps extends Component {
   getListRestaurants = () => {
     let listRestaurants = listRestaurantsJA;
     let {languageCode} = this.state;
-    let lng = languageCode;
-    if (languageCode === '') {
-      lng = locale.substr(0, 2);
-    }
-    if (lng === 'vi') {
+    // if (languageCode === '') {
+    //   languageCode = locale.substr(0, 2);
+    // }
+    if (languageCode === 'vi') {
       listRestaurants = listRestaurantsVI;
     }
-    if (lng === 'en') {
+    if (languageCode === 'en') {
       listRestaurants = listRestaurantsEN;
     }
     this.setState({
@@ -96,14 +96,23 @@ class Maps extends Component {
         };
         this.setState({initialPosition});
       },
-      error => Alert.alert(error.message),
+      error => console.log(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
     );
   };
 
   render() {
-    const {container, imageMarker, titleMarker} = styles;
-    const {navigation} = this.props;
+    const {
+      container,
+      imageMarker,
+      titleMarker,
+      markerWrapper,
+      textMarker,
+      content,
+      more,
+      textMore,
+    } = styles;
+    const {navigation, t} = this.props;
     return (
       <View style={container}>
         <MapView
@@ -130,7 +139,20 @@ class Maps extends Component {
                 onPress={() =>
                   navigation.navigate('MenuFoodsScreen', {restaurant})
                 }>
-                <Text style={titleMarker}>{restaurant.name}</Text>
+                <View style={markerWrapper}>
+                  <Text style={titleMarker}>{restaurant.name}</Text>
+                  <View style={content}>
+                    <Icon name="map-marker" type="font-awesome" />
+                    <Text style={textMarker}>{restaurant.address}</Text>
+                  </View>
+                  <View style={content}>
+                    <Icon name="phone" type="font-awesome" />
+                    <Text style={textMarker}>{restaurant.phone}</Text>
+                  </View>
+                  <View style={more}>
+                    <Text style={textMore}>{t('maps:see more')}</Text>
+                  </View>
+                </View>
               </Callout>
             </Marker>
           ))}
@@ -146,6 +168,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    flex: 1,
+    padding: 10,
   },
   imageMarker: {
     width: 40,
@@ -153,10 +177,28 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
   titleMarker: {
-    fontSize: 16,
-    width: 200,
+    fontSize: 18,
     fontWeight: 'bold',
+  },
+  markerWrapper: {
+    width: 250,
+    padding: 10,
+  },
+  content: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  textMarker: {
+    marginLeft: 10,
+    fontSize: 15,
+  },
+  more: {
+    alignItems: 'flex-end',
+  },
+  textMore: {
+    fontSize: 15,
+    color: '#001F5F',
   },
 });
 
-export default Maps;
+export default withNamespaces(['maps', 'common'], {wait: true})(Maps);

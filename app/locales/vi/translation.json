@@ -4,7 +4,8 @@
     "business hours": "Giờ mở cửa"
   },
   "maps": {
-    "title": "Bản đồ"
+    "title": "Bản đồ",
+    "see more": "Xem thêm..."
   },
   "about": {
     "title": "Về chúng tôi",
@@ -14,7 +15,7 @@
     "email": "Email",
     "website": "Website",
     "Jbannet Asia Company Limited": "Công ty TNHH Jbannet Asia",
-    "105, Le Loi, Hai Chau, Da Nang": "105, Lê Lợi, Hải Châu, Đà Nẵng"
+    "place": "105, Lê Lợi, Hải Châu, Đà Nẵng"
   },
   "language_setting": {
     "title": "Chọn ngôn ngữ",
