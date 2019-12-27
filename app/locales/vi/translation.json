@@ -5,13 +5,14 @@
   },
   "maps": {
     "title": "Bản đồ",
-    "see more": "Xem thêm..."
+    "see more": "Xem thêm...",
+    "propmt gps": "Để tiếp tục, vui lòng bật vị trí thiết bị của bạn!"
   },
   "about": {
     "title": "Về chúng tôi",
     "company": "Công ty",
     "address": "Địa chỉ",
-    "phone": "Số điện thoại",
+    "phone": "Điện thoại",
     "email": "Email",
     "website": "Website",
     "Jbannet Asia Company Limited": "Công ty TNHH Jbannet Asia",
@@ -26,6 +27,8 @@
     "done": "Xong"
   },
   "common": {
-    "empty data" : "Không có dữ liệu..."
+    "empty data" : "Không có dữ liệu...",
+    "setting": "Cài đặt",
+    "skip": "Bỏ qua"
   }
 }

@@ -5,7 +5,8 @@
   },
   "maps": {
     "title": "Maps",
-    "see more": "See more..."
+    "see more": "See more...",
+    "propmt gps": "To continue, please turn on your device location!"
   },
   "about": {
     "title": "About us",
@@ -26,6 +27,8 @@
     "done": "Done"
   },
   "common": {
-    "empty data": "No data available..."
+    "empty data": "No data available...",
+    "setting": "Setting",
+    "skip": "Skip"
   }
 }

@@ -17,6 +17,7 @@ import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
 import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
 import {Icon} from 'react-native-elements';
 import {withNamespaces} from 'react-i18next';
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -86,19 +87,34 @@ class Maps extends Component {
   };
 
   locateCurrentPosition = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        let initialPosition = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          latitudeDelta: LATTITUDE_DELTA,
-          longitudeDelta: LONGTITUDE_DELTA,
-        };
-        this.setState({initialPosition});
+    const {t} = this.props;
+    LocationServicesDialogBox.checkLocationServicesIsEnabled({
+      message: t('maps:propmt gps'),
+      ok: t('common:setting'),
+      cancel: t('common:skip'),
+      style: {
+        positiveButtonTextColor: '#001F5F',
+        negativeButtonTextColor: '#7E7E7E',
       },
-      error => console.log(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-    );
+    })
+      .then(() => {
+        Geolocation.getCurrentPosition(
+          position => {
+            let initialPosition = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              latitudeDelta: LATTITUDE_DELTA,
+              longitudeDelta: LONGTITUDE_DELTA,
+            };
+            this.setState({initialPosition});
+          },
+          error => console.log(error.message),
+          {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+        );
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
   };
 
   render() {

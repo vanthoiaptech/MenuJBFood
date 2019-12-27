@@ -53,21 +53,21 @@ class About extends Component {
             <Icon name="phone" type="font-awesome" color="#001F5F" />
             <View style={textWrapper}>
               <Text style={title}>{t('about:phone')}</Text>
-              <Text style={text}>0123456789</Text>
+              <Text style={text}>02363539879</Text>
             </View>
           </View>
           <View style={contentItem}>
             <Icon name="envelope" type="font-awesome" color="#001F5F" />
             <View style={textWrapper}>
               <Text style={title}>{t('about:email')}</Text>
-              <Text style={text}>example@jbannetasia.com</Text>
+              <Text style={text}>info@jibannetasia.vn</Text>
             </View>
           </View>
           <View style={contentItem}>
             <Icon name="globe" type="font-awesome" color="#001F5F" />
             <View style={textWrapper}>
               <Text style={title}>{t('about:website')}</Text>
-              <Text style={text}>example.com</Text>
+              <Text style={text}>www.jibannetasia.vn</Text>
             </View>
           </View>
         </View>

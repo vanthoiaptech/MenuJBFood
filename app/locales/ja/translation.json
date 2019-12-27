@@ -5,7 +5,8 @@
   },
   "maps": {
     "title": "地図",
-    "see more": "もっと見る..."
+    "see more": "もっと見る...",
+    "propmt gps": "続行するには、デバイスの場所をオンにしてください！"
   },
   "about": {
     "title": "私たちに関しては",
@@ -26,6 +27,8 @@
     "done": "完了"
   },
   "common": {
-    "empty data" : "データなし..."
+    "empty data" : "データなし...",
+    "setting": "セッティング",
+    "skip": "スキップ"
   }
 }
