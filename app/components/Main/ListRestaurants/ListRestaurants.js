@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {FlatList, SafeAreaView, Alert, RefreshControl} from 'react-native';
+import {FlatList, SafeAreaView, RefreshControl} from 'react-native';
 // import locale from 'react-native-locale-detector';
-import AsyncStorage from '@react-native-community/async-storage';
+import {getLanguageCode} from '../../../helpers';
 import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
 import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
 import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
@@ -22,20 +22,6 @@ class ListRestaurants extends Component {
     return {
       title: navigation.getParam('categoryName'),
     };
-  };
-
-  // get language saved AsyncStorage
-  getStorangeValue = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@languageCode');
-      if (value !== null) {
-        this.setState({
-          languageCode: value,
-        });
-      }
-    } catch (error) {
-      Alert.alert(error);
-    }
   };
 
   getListRestaurantsByCategoryId = id => {
@@ -63,7 +49,13 @@ class ListRestaurants extends Component {
 
   async componentDidMount() {
     const {categoryId} = this.props.navigation.state.params;
-    await this.getStorangeValue();
+    await getLanguageCode()
+      .then(res =>
+        this.setState({
+          languageCode: res,
+        }),
+      )
+      .catch(err => console.log(err));
     this.getListRestaurantsByCategoryId(categoryId);
   }
 

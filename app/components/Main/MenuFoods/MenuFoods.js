@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 // import locale from 'react-native-locale-detector';
-import AsyncStorage from '@react-native-community/async-storage';
+import {getLanguageCode} from '../../../helpers';
 import foodsVI from '../../../../api/foods/foods_vi';
 import foodsEN from '../../../../api/foods/foods_en';
 import foodsJA from '../../../../api/foods/foods_ja';
@@ -29,7 +29,7 @@ class MenuFoods extends Component {
     super(props);
     this.state = {
       isModalVisible: false,
-      imageName: 'Uni-Gunkan-Sushi.jpg',
+      imageName: '',
       foods: [],
       languageCode: '',
     };
@@ -39,20 +39,6 @@ class MenuFoods extends Component {
     return {
       title: navigation.getParam('restaurant').name,
     };
-  };
-
-  // get language saved AsyncStorage
-  getStorangeValue = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@languageCode');
-      if (value !== null) {
-        this.setState({
-          languageCode: value,
-        });
-      }
-    } catch (error) {
-      Alert.alert(error);
-    }
   };
 
   getFoodsByRestaurantId = id => {
@@ -80,7 +66,13 @@ class MenuFoods extends Component {
 
   async componentDidMount() {
     const {restaurant} = this.props.navigation.state.params;
-    await this.getStorangeValue();
+    await getLanguageCode()
+      .then(res =>
+        this.setState({
+          languageCode: res,
+        }),
+      )
+      .catch(err => console.log(err));
     this.getFoodsByRestaurantId(restaurant.id);
   }
 

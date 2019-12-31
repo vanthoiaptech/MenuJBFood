@@ -1,19 +1,13 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  Alert,
-  RefreshControl,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import Category from './Category';
 import EmptyData from '../EmptyData';
 // import locale from 'react-native-locale-detector';
 import categoriesVI from '../../../../api/categories/categories_vi';
 import categoriesEN from '../../../../api/categories/categories_en';
 import categoriesJA from '../../../../api/categories/categories_ja';
-import AsyncStorage from '@react-native-community/async-storage';
 import {withNamespaces} from 'react-i18next';
+import {getLanguageCode} from '../../../helpers';
 
 class Categories extends Component {
   constructor(props) {
@@ -24,20 +18,6 @@ class Categories extends Component {
       refreshing: false,
     };
   }
-
-  // get language saved AsyncStorage
-  getStorangeValue = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@languageCode');
-      if (value !== null) {
-        this.setState({
-          languageCode: value,
-        });
-      }
-    } catch (error) {
-      Alert.alert(error);
-    }
-  };
 
   getCategoriesData = () => {
     this.setState({
@@ -61,7 +41,13 @@ class Categories extends Component {
   };
 
   async componentDidMount() {
-    await this.getStorangeValue();
+    await getLanguageCode()
+      .then(res =>
+        this.setState({
+          languageCode: res,
+        }),
+      )
+      .catch(err => console.log(err));
     this.getCategoriesData();
   }
 

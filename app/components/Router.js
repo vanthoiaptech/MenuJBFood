@@ -13,7 +13,6 @@ import ListRestaurants from './Main/ListRestaurants/ListRestaurants';
 import MenuFoods from './Main/MenuFoods/MenuFoods';
 import Menu from './Main/Menu/Menu';
 import Splash from './Splash';
-import LanguageSetting from './Main/LanguageSetting/LanguageSetting';
 
 const {width} = Dimensions.get('window');
 // customize header react navigation
@@ -113,19 +112,6 @@ const AboutStack = createStackNavigator(
   {...headerStyleCommon},
 );
 
-// route language setting
-const LanguageSettingStack = createStackNavigator(
-  {
-    LanguageSettingScreen: {
-      screen: LanguageSetting,
-      navigationOptions: ({navigation, screenProps}) => ({
-        title: screenProps.t('language_setting:title'),
-      }),
-    },
-  },
-  {...headerStyleCommon},
-);
-
 // route tabbar
 const TabBarComponent = props => <BottomTabBar {...props} />;
 const TabNavigation = createBottomTabNavigator(
@@ -194,9 +180,6 @@ const DrawerNavigator = createDrawerNavigator(
   {
     Tabbar: {
       screen: TabNavigation,
-    },
-    LanguageSetting: {
-      screen: LanguageSettingStack,
     },
   },
   {

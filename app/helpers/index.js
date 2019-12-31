@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {Alert} from 'react-native';
 
-export const getStorangeValue = async () => {
+export const getLanguageCode = async () => {
   try {
     const value = await AsyncStorage.getItem('@languageCode');
     if (value !== null) {
       return value;
     }
+    return null;
   } catch (error) {
-    Alert.alert(error);
+    return null;
   }
 };

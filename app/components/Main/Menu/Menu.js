@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
 import i18n from '../../../utils/i18n';
 import RNRestart from 'react-native-restart';
+import {getLanguageCode} from '../../../helpers';
 
 class Menu extends Component {
   constructor(props) {
@@ -37,21 +38,14 @@ class Menu extends Component {
     );
   };
 
-  getStorangeValue = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@languageCode');
-      if (value !== null) {
-        this.setState({
-          languageCode: value,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   componentDidMount() {
-    this.getStorangeValue();
+    getLanguageCode()
+      .then(res =>
+        this.setState({
+          languageCode: res,
+        }),
+      )
+      .catch(err => console.log(err));
   }
 
   render() {
