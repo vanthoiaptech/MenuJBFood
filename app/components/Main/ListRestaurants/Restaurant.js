@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {Rating} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {restaurantImageUrl} from '../../../constants/urlDefine';
 
 class Restaurant extends Component {
   render() {
@@ -23,7 +24,7 @@ class Restaurant extends Component {
           <View style={imageWrapper}>
             <Image
               style={imageStyle}
-              source={require('../../../images/LOGO.png')}
+              source={{uri: restaurantImageUrl(restaurant.image)}}
             />
           </View>
           <View style={contentWrapper}>

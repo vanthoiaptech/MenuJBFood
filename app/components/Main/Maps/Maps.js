@@ -12,12 +12,10 @@ import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS} from 'react-native-permissions';
 // import locale from 'react-native-locale-detector';
 import {getLanguageCode} from '../../../helpers';
-import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
-import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
-import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
 import {Icon} from 'react-native-elements';
 import {withNamespaces} from 'react-i18next';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import {getApiRestaurants} from '../../../../api/restaurants';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -30,25 +28,23 @@ class Maps extends Component {
     this.state = {
       listRestaurants: [],
       marginTop: 0,
-      languageCode: '',
+      languageCode: 'ja',
     };
   }
 
   getListRestaurants = () => {
-    let listRestaurants = listRestaurantsJA;
     let {languageCode} = this.state;
-    // if (languageCode === '') {
-    //   languageCode = locale.substr(0, 2);
-    // }
-    if (languageCode === 'vi') {
-      listRestaurants = listRestaurantsVI;
-    }
-    if (languageCode === 'en') {
-      listRestaurants = listRestaurantsEN;
-    }
-    this.setState({
-      listRestaurants: listRestaurants,
-    });
+    getApiRestaurants(languageCode, null)
+      .then(listRestaurants =>
+        this.setState({
+          listRestaurants,
+        }),
+      )
+      .catch(() =>
+        this.setState({
+          listRestaurants: [],
+        }),
+      );
   };
 
   async componentDidMount() {
@@ -121,6 +117,7 @@ class Maps extends Component {
       textMore,
     } = styles;
     const {navigation, t} = this.props;
+    const {listRestaurants, marginTop} = this.state;
     return (
       <View style={container}>
         <MapView
@@ -128,15 +125,15 @@ class Maps extends Component {
           showsUserLocation={true}
           style={{
             ...StyleSheet.absoluteFillObject,
-            marginTop: this.state.marginTop,
+            marginTop: marginTop,
           }}
           initialRegion={this.state.initialPosition}>
-          {this.state.listRestaurants.map(restaurant => (
+          {listRestaurants.map(restaurant => (
             <Marker
               key={restaurant.id}
               coordinate={{
-                latitude: restaurant.latitude,
-                longitude: restaurant.longitude,
+                latitude: parseFloat(restaurant.latitude),
+                longitude: parseFloat(restaurant.longitude),
               }}>
               <Image
                 style={imageMarker}

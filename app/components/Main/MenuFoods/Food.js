@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {foodImageUrl} from '../../../constants/urlDefine';
 
 class Food extends Component {
   showModal = () => {
@@ -25,7 +26,7 @@ class Food extends Component {
           <View style={imageWrapper}>
             <Image
               source={{
-                uri: `https://kyotosushi.vn/wp-content/uploads/2018/11/${imageFood}`,
+                uri: foodImageUrl(imageFood),
               }}
               style={image}
             />

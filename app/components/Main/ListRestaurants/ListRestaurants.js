@@ -1,20 +1,25 @@
 import React, {Component} from 'react';
-import {FlatList, SafeAreaView, RefreshControl} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
 // import locale from 'react-native-locale-detector';
 import {getLanguageCode} from '../../../helpers';
-import listRestaurantsVI from '../../../../api/restaurants/restaurants_vi';
-import listRestaurantsEN from '../../../../api/restaurants/restaurants_en';
-import listRestaurantsJA from '../../../../api/restaurants/restaurants_ja';
 import Restaurant from './Restaurant';
 import EmptyData from '../EmptyData';
+import {getApiRestaurants} from '../../../../api/restaurants';
 
 class ListRestaurants extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      languageCode: '',
+      languageCode: 'ja',
       listRestaurants: [],
-      refreshing: false,
+      isLoading: true,
+      page: 1,
     };
   }
 
@@ -25,26 +30,20 @@ class ListRestaurants extends Component {
   };
 
   getListRestaurantsByCategoryId = id => {
-    let listRestaurants = listRestaurantsJA;
-    let {languageCode} = this.state;
-    // if (languageCode === '') {
-    //   languageCode = locale.substr(0, 2);
-    // }
-    if (languageCode === 'vi') {
-      listRestaurants = listRestaurantsVI;
-    }
-    if (languageCode === 'en') {
-      listRestaurants = listRestaurantsEN;
-    }
-    let tmp = [];
-    return listRestaurants.filter(item => {
-      if (item.category_id === id) {
-        tmp.push(item);
+    let {languageCode, page} = this.state;
+    getApiRestaurants(languageCode, id, page)
+      .then(restaurant =>
         this.setState({
-          listRestaurants: tmp,
+          listRestaurants: this.state.listRestaurants.concat(restaurant.data),
+          isLoading: false,
+        }),
+      )
+      .catch(() => {
+        this.setState({
+          listRestaurants: [],
+          isLoading: false,
         });
-      }
-    });
+      });
   };
 
   async componentDidMount() {
@@ -55,17 +54,44 @@ class ListRestaurants extends Component {
           languageCode: res,
         }),
       )
-      .catch(err => console.log(err));
+      .catch(() =>
+        this.setState({
+          languageCode: 'ja',
+        }),
+      );
     this.getListRestaurantsByCategoryId(categoryId);
   }
 
-  onRefresh = () => {
-    this.getListRestaurantsByCategoryId();
+  handleLoadMore = () => {
+    const {categoryId} = this.props.navigation.state.params;
+    this.setState(
+      {
+        page: this.state.page + 1,
+      },
+      () => this.getListRestaurantsByCategoryId(categoryId),
+    );
+  };
+
+  renderFooter = () => {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="small" color="#0000ff" />
+      </View>
+    );
   };
 
   render() {
     const {navigation} = this.props;
-    const {listRestaurants, refreshing} = this.state;
+    const {listRestaurants, isLoading, flatList} = this.state;
+    const {spinner} = styles;
+
+    if (isLoading) {
+      return (
+        <View style={spinner}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    }
 
     if (listRestaurants.length <= 0) {
       return <EmptyData />;
@@ -73,21 +99,33 @@ class ListRestaurants extends Component {
     return (
       <SafeAreaView>
         <FlatList
+          style={flatList}
           data={listRestaurants}
           renderItem={({item}) => (
             <Restaurant restaurant={item} navigation={navigation} />
           )}
           keyExtractor={item => item.id.toString()}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={this.onRefresh}
-            />
-          }
+          onEndReached={this.handleLoadMore}
+          onEndReachedThreshold={0.3}
+          ListFooterComponent={this.renderFooter}
         />
       </SafeAreaView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  flatList: {
+    flex: 1,
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  loader: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+});
 
 export default ListRestaurants;

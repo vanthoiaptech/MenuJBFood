@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Image, StyleSheet, Dimensions} from 'react-native';
 import Modal from 'react-native-modal';
 import {Icon} from 'react-native-elements';
+import {foodImageUrl} from '../../../constants/urlDefine';
 
 const {width, height} = Dimensions.get('window');
 
@@ -19,7 +20,7 @@ class FoodModal extends Component {
             <Image
               style={image}
               source={{
-                uri: `https://kyotosushi.vn/wp-content/uploads/2018/11/${imageName}`,
+                uri: foodImageUrl(imageName),
               }}
             />
             <View style={closeIcon}>

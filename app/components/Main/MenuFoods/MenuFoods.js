@@ -11,16 +11,16 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 // import locale from 'react-native-locale-detector';
 import {getLanguageCode} from '../../../helpers';
-import foodsVI from '../../../../api/foods/foods_vi';
-import foodsEN from '../../../../api/foods/foods_en';
-import foodsJA from '../../../../api/foods/foods_ja';
 import Food from './Food';
 import i18n from '../../../utils/i18n';
 import EmptyData from '../EmptyData';
 import FoodModal from './FoodModal';
+import {getApiFoodsByRestaurant} from '../../../../api/foods';
+import {restaurantImageUrl} from '../../../constants/urlDefine';
 
 const {width} = Dimensions.get('window');
 
@@ -31,7 +31,8 @@ class MenuFoods extends Component {
       isModalVisible: false,
       imageName: '',
       foods: [],
-      languageCode: '',
+      languageCode: 'ja',
+      isLoading: true,
     };
   }
 
@@ -42,26 +43,20 @@ class MenuFoods extends Component {
   };
 
   getFoodsByRestaurantId = id => {
-    let foods = foodsJA;
     let {languageCode} = this.state;
-    // if (languageCode === '') {
-    //   languageCode = locale.substr(0, 2);
-    // }
-    if (languageCode === 'vi') {
-      foods = foodsVI;
-    }
-    if (languageCode === 'en') {
-      foods = foodsEN;
-    }
-    let tmp = [];
-    return foods.filter(item => {
-      if (item.restaurant_id === id) {
-        tmp.push(item);
+    getApiFoodsByRestaurant(id, languageCode)
+      .then(foods =>
         this.setState({
-          foods: tmp,
-        });
-      }
-    });
+          foods: foods.data,
+          isLoading: false,
+        }),
+      )
+      .catch(() =>
+        this.setState({
+          foods: [],
+          isLoading: false,
+        }),
+      );
   };
 
   async componentDidMount() {
@@ -116,10 +111,10 @@ class MenuFoods extends Component {
       logoImg,
       addressText,
       openText,
+      spinner,
     } = styles;
-    const {foods} = this.state;
     const {restaurant} = this.props.navigation.state.params;
-
+    const {foods, isLoading, imageName, isModalVisible} = this.state;
     // Foods list
     let foodsFlatList = (
       <SafeAreaView style={listFoods}>
@@ -137,11 +132,15 @@ class MenuFoods extends Component {
       </SafeAreaView>
     );
 
-    if (foods.length === 0) {
+    if (isLoading) {
+      foodsFlatList = (
+        <View style={spinner}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    } else if (foods.length === 0) {
       foodsFlatList = <EmptyData />;
     }
-
-    const {imageName, isModalVisible} = this.state;
 
     return (
       <View style={container}>
@@ -153,7 +152,7 @@ class MenuFoods extends Component {
         <View style={banner}>
           <Image
             style={bannerImg}
-            source={require('../../../images/restaurants.jpg')}
+            source={{uri: restaurantImageUrl(restaurant.image)}}
           />
           <View style={contentWrapper}>
             <TouchableOpacity
@@ -234,6 +233,10 @@ const styles = StyleSheet.create({
   },
   listFoods: {
     flex: 6,
+  },
+  spinner: {
+    flex: 6,
+    justifyContent: 'center',
   },
 });
 

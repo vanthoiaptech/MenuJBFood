@@ -1,53 +1,57 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  View,
+} from 'react-native';
 import Category from './Category';
 import EmptyData from '../EmptyData';
 // import locale from 'react-native-locale-detector';
-import categoriesVI from '../../../../api/categories/categories_vi';
-import categoriesEN from '../../../../api/categories/categories_en';
-import categoriesJA from '../../../../api/categories/categories_ja';
 import {withNamespaces} from 'react-i18next';
 import {getLanguageCode} from '../../../helpers';
+import {getApiCategories} from '../../../../api/categories';
 
 class Categories extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      languageCode: '',
+      languageCode: 'ja',
       categories: [],
-      refreshing: false,
+      isLoading: true,
     };
   }
 
   getCategoriesData = () => {
-    this.setState({
-      refreshing: true,
-    });
-    let categories = categoriesJA;
     let {languageCode} = this.state;
-    // if (languageCode === '') {
-    //   languageCode = locale.substr(0, 2);
-    // }
-    if (languageCode === 'vi') {
-      categories = categoriesVI;
-    }
-    if (languageCode === 'en') {
-      categories = categoriesEN;
-    }
-    this.setState({
-      categories: categories,
-      refreshing: false,
-    });
+    getApiCategories(languageCode)
+      .then(categories =>
+        this.setState({
+          categories,
+          isLoading: false,
+        }),
+      )
+      .catch(() =>
+        this.setState({
+          categories: [],
+          isLoading: false,
+        }),
+      );
   };
 
   async componentDidMount() {
     await getLanguageCode()
-      .then(res =>
+      .then(languageCode =>
         this.setState({
-          languageCode: res,
+          languageCode,
         }),
       )
-      .catch(err => console.log(err));
+      .catch(() =>
+        this.setState({
+          languageCode: 'ja',
+        }),
+      );
     this.getCategoriesData();
   }
 
@@ -56,13 +60,22 @@ class Categories extends Component {
   };
 
   render() {
-    const {categories, refreshing} = this.state;
-    const {container, listCategories} = styles;
+    const {categories, isLoading} = this.state;
+    const {container, listCategories, spinner} = styles;
     const {navigation} = this.props;
+
+    if (isLoading) {
+      return (
+        <View style={spinner}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    }
 
     if (categories.length <= 0) {
       return <EmptyData />;
     }
+
     return (
       <SafeAreaView style={container}>
         <FlatList
@@ -73,12 +86,6 @@ class Categories extends Component {
             <Category navigation={navigation} category={item} index={index} />
           )}
           keyExtractor={item => item.id.toString()}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={this.onRefresh}
-            />
-          }
         />
       </SafeAreaView>
     );
@@ -95,6 +102,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
