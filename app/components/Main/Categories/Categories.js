@@ -55,10 +55,6 @@ class Categories extends Component {
     this.getCategoriesData();
   }
 
-  onRefresh = () => {
-    this.getCategoriesData();
-  };
-
   render() {
     const {categories, isLoading} = this.state;
     const {container, listCategories, spinner} = styles;
