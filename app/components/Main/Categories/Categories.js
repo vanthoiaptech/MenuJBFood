@@ -12,14 +12,15 @@ class Categories extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      languageCode: 'ja',
+      languageCode: '',
       categories: [],
       isLoading: true,
     };
   }
 
   getCategoriesData = () => {
-    let {languageCode} = this.state;
+    const {languageCode} = this.state;
+
     getApiCategories(languageCode)
       .then(categories =>
         this.setState({
@@ -37,11 +38,12 @@ class Categories extends Component {
 
   async componentDidMount() {
     await getLanguageCode()
-      .then(languageCode =>
+      .then(res => {
+        let languageCode = res ? res : 'ja';
         this.setState({
           languageCode,
-        }),
-      )
+        });
+      })
       .catch(() =>
         this.setState({
           languageCode: 'ja',

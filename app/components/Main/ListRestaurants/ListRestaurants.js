@@ -27,9 +27,9 @@ class ListRestaurants extends Component {
     };
   };
 
-  // get restaurants data from api backend
+  // get restaurants data from backend
   getListRestaurantsByCategoryId = id => {
-    let {languageCode, page, listRestaurants} = this.state;
+    const {languageCode, page, listRestaurants} = this.state;
     this.setState({isLoading: true});
     getApiRestaurants(languageCode, id, page)
       .then(restaurant =>
@@ -53,11 +53,12 @@ class ListRestaurants extends Component {
   async componentDidMount() {
     const {categoryId} = this.props.navigation.state.params;
     await getLanguageCode()
-      .then(res =>
+      .then(res => {
+        const languageCode = res ? res : 'ja';
         this.setState({
-          languageCode: res,
-        }),
-      )
+          languageCode,
+        });
+      })
       .catch(() =>
         this.setState({
           languageCode: 'ja',

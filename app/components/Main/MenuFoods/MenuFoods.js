@@ -11,6 +11,7 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 // import locale from 'react-native-locale-detector';
 import {getLanguageCode} from '../../../helpers';
@@ -31,8 +32,12 @@ class MenuFoods extends Component {
       isModalVisible: false,
       imageName: '',
       foods: [],
+      foodsNextPage: [],
       languageCode: 'ja',
-      isLoading: true,
+      isLoading: false,
+      page: 1,
+      hasScrolled: false,
+      isRefreshing: false,
     };
   }
 
@@ -42,12 +47,17 @@ class MenuFoods extends Component {
     };
   };
 
+  // get foods data from backend
   getFoodsByRestaurantId = id => {
-    let {languageCode} = this.state;
-    getApiFoodsByRestaurant(id, languageCode)
-      .then(foods =>
+    let {languageCode, page, foods} = this.state;
+    this.setState({
+      isLoading: true,
+    });
+    getApiFoodsByRestaurant(id, languageCode, page)
+      .then(res =>
         this.setState({
-          foods: foods.data,
+          foods: [...foods, ...res.data],
+          foodsNextPage: res.data,
           isLoading: false,
         }),
       )
@@ -62,12 +72,17 @@ class MenuFoods extends Component {
   async componentDidMount() {
     const {restaurant} = this.props.navigation.state.params;
     await getLanguageCode()
-      .then(res =>
+      .then(res => {
+        const languageCode = res ? res : 'ja';
         this.setState({
-          languageCode: res,
+          languageCode,
+        });
+      })
+      .catch(() =>
+        this.setState({
+          languageCode: 'ja',
         }),
-      )
-      .catch(err => console.log(err));
+      );
     this.getFoodsByRestaurantId(restaurant.id);
   }
 
@@ -98,25 +113,74 @@ class MenuFoods extends Component {
     });
   };
 
-  render() {
-    const {
-      container,
-      banner,
-      bannerImg,
-      listFoods,
-      contentWrapper,
-      contentButton,
-      contentText,
-      contentLogo,
-      logoImg,
-      addressText,
-      openText,
-    } = styles;
+  // handle load more Foods data from backend when scroll to the bottom
+  handleLoadMore = () => {
+    if (!this.state.hasScrolled) {
+      return;
+    }
     const {restaurant} = this.props.navigation.state.params;
-    const {foods, isLoading, imageName, isModalVisible} = this.state;
-    // Foods list
-    let foodsFlatList = (
-      <SafeAreaView style={listFoods}>
+    const {isLoading, foodsNextPage} = this.state;
+    if (!isLoading && foodsNextPage.length > 0) {
+      this.setState(
+        {
+          isLoading: true,
+          page: this.state.page + 1,
+        },
+        () => this.getFoodsByRestaurantId(restaurant.id),
+      );
+    }
+  };
+
+  // spinner load more data
+  renderFooter = () => {
+    if (!this.state.isLoading) {
+      return null;
+    }
+    return <Spinner size="small" />;
+  };
+
+  onScroll = () => {
+    this.setState({
+      hasScrolled: true,
+    });
+  };
+
+  onRefresh = () => {
+    this.setState({
+      isRefreshing: true,
+      page: 1,
+    });
+
+    const {restaurant} = this.props.navigation.state.params;
+    const {languageCode} = this.state;
+    getApiFoodsByRestaurant(restaurant.id, languageCode, 1)
+      .then(res =>
+        this.setState({
+          foods: res.data,
+          foodsNextPage: res.data,
+          isRefreshing: false,
+        }),
+      )
+      .catch(() =>
+        this.setState({
+          foods: [],
+          isRefreshing: false,
+        }),
+      );
+  };
+
+  renderFoodsFlatList = () => {
+    const {foods, isLoading, page} = this.state;
+    if (isLoading && page === 1) {
+      return <Spinner size="large" style="loading" />;
+    }
+
+    if (foods.length <= 0) {
+      return <EmptyData />;
+    }
+
+    return (
+      <SafeAreaView style={styles.listFoods}>
         <FlatList
           data={foods}
           renderItem={({item, index}) => (
@@ -127,15 +191,37 @@ class MenuFoods extends Component {
             />
           )}
           keyExtractor={item => item.id.toString()}
+          onEndReachedThreshold={0.01}
+          onEndReached={() => this.handleLoadMore()}
+          ListFooterComponent={() => this.renderFooter()}
+          onScroll={() => this.onScroll()}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={() => this.onRefresh()}
+              colors={['#0000FF']}
+            />
+          }
         />
       </SafeAreaView>
     );
+  };
 
-    if (isLoading) {
-      foodsFlatList = <Spinner size="large" style="loading" />;
-    } else if (foods.length === 0) {
-      foodsFlatList = <EmptyData />;
-    }
+  render() {
+    const {
+      container,
+      banner,
+      bannerImg,
+      contentWrapper,
+      contentButton,
+      contentText,
+      contentLogo,
+      logoImg,
+      addressText,
+      openText,
+    } = styles;
+    const {restaurant} = this.props.navigation.state.params;
+    const {imageName, isModalVisible} = this.state;
 
     return (
       <View style={container}>
@@ -171,7 +257,7 @@ class MenuFoods extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        {foodsFlatList}
+        {this.renderFoodsFlatList()}
       </View>
     );
   }

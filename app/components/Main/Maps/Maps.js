@@ -51,12 +51,17 @@ class Maps extends Component {
     setTimeout(() => this.setState({marginTop: -1}), 500);
     this.requestLocationPermission();
     await getLanguageCode()
-      .then(res =>
+      .then(res => {
+        const languageCode = res ? res : 'ja';
         this.setState({
-          languageCode: res,
+          languageCode,
+        });
+      })
+      .catch(() =>
+        this.setState({
+          languageCode: 'ja',
         }),
-      )
-      .catch(err => console.log(err));
+      );
     this.getListRestaurants();
   }
 
