@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
-import {
-  FlatList,
-  SafeAreaView,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-} from 'react-native';
+import {FlatList, SafeAreaView, RefreshControl} from 'react-native';
 // import locale from 'react-native-locale-detector';
 import {getLanguageCode} from '../../../helpers';
 import Restaurant from './Restaurant';
 import EmptyData from '../EmptyData';
 import {getApiRestaurants} from '../../../../api/restaurants';
+import Spinner from '../Spinner';
 
 class ListRestaurants extends Component {
   constructor(props) {
@@ -21,6 +16,8 @@ class ListRestaurants extends Component {
       isLoading: false,
       hasScrolled: false,
       page: 1,
+      restaurantNextPage: [],
+      isRefreshing: false,
     };
   }
 
@@ -32,20 +29,23 @@ class ListRestaurants extends Component {
 
   // get restaurants data from api backend
   getListRestaurantsByCategoryId = id => {
-    let {languageCode, page} = this.state;
+    let {languageCode, page, listRestaurants} = this.state;
     this.setState({isLoading: true});
     getApiRestaurants(languageCode, id, page)
       .then(restaurant =>
         this.setState({
-          listRestaurants: this.state.listRestaurants.concat(restaurant.data),
+          listRestaurants: [...listRestaurants, ...restaurant.data],
           isLoading: false,
-          totalPage: restaurant.last_page,
+          restaurantNextPage: restaurant.data,
+          isRefreshing: false,
         }),
       )
       .catch(() => {
         this.setState({
           listRestaurants: [],
           isLoading: false,
+          restaurantNextPage: [],
+          isRefreshing: false,
         });
       });
   };
@@ -76,17 +76,41 @@ class ListRestaurants extends Component {
       return;
     }
     const {categoryId} = this.props.navigation.state.params;
-    if (!this.state.isLoading) {
-      this.setState({
-        isLoading: true,
-      });
+    const {isLoading, restaurantNextPage} = this.state;
+    if (!isLoading && restaurantNextPage.length > 0) {
       this.setState(
         {
           page: this.state.page + 1,
+          isLoading: true,
         },
         () => this.getListRestaurantsByCategoryId(categoryId),
       );
     }
+  };
+
+  // handle refresh restaurants data
+  onRefresh = () => {
+    const {categoryId} = this.props.navigation.state.params;
+    const {languageCode} = this.state;
+    this.setState({
+      isRefreshing: true,
+      page: 1,
+    });
+
+    getApiRestaurants(languageCode, categoryId, 1)
+      .then(restaurant =>
+        this.setState({
+          listRestaurants: restaurant.data,
+          restaurantNextPage: restaurant.data,
+          isRefreshing: false,
+        }),
+      )
+      .catch(() => {
+        this.setState({
+          listRestaurants: [],
+          isRefreshing: false,
+        });
+      });
   };
 
   // spinner load more data
@@ -94,24 +118,15 @@ class ListRestaurants extends Component {
     if (!this.state.isLoading) {
       return null;
     }
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="small" color="#0000ff" />
-      </View>
-    );
+    return <Spinner size="small" />;
   };
 
   render() {
     const {navigation} = this.props;
-    const {listRestaurants, isLoading, flatList, page} = this.state;
-    const {spinner} = styles;
+    const {listRestaurants, isLoading, page} = this.state;
 
     if (isLoading && page === 1) {
-      return (
-        <View style={spinner}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      );
+      return <Spinner size="large" style="loading" />;
     }
 
     if (listRestaurants.length <= 0) {
@@ -121,7 +136,6 @@ class ListRestaurants extends Component {
     return (
       <SafeAreaView>
         <FlatList
-          style={flatList}
           data={listRestaurants}
           renderItem={({item}) => (
             <Restaurant restaurant={item} navigation={navigation} />
@@ -131,24 +145,17 @@ class ListRestaurants extends Component {
           onEndReached={() => this.handleLoadMore()}
           ListFooterComponent={() => this.renderFooter()}
           onScroll={() => this.onScroll()}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={() => this.onRefresh()}
+              colors={['#0000FF']}
+            />
+          }
         />
       </SafeAreaView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  flatList: {
-    flex: 1,
-  },
-  spinner: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  loader: {
-    marginTop: 10,
-    alignItems: 'center',
-  },
-});
 
 export default ListRestaurants;

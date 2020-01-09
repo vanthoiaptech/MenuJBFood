@@ -11,7 +11,6 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
-  ActivityIndicator,
 } from 'react-native';
 // import locale from 'react-native-locale-detector';
 import {getLanguageCode} from '../../../helpers';
@@ -21,6 +20,7 @@ import EmptyData from '../EmptyData';
 import FoodModal from './FoodModal';
 import {getApiFoodsByRestaurant} from '../../../../api/foods';
 import {restaurantImageUrl} from '../../../constants/urlDefine';
+import Spinner from '../Spinner';
 
 const {width} = Dimensions.get('window');
 
@@ -111,7 +111,6 @@ class MenuFoods extends Component {
       logoImg,
       addressText,
       openText,
-      spinner,
     } = styles;
     const {restaurant} = this.props.navigation.state.params;
     const {foods, isLoading, imageName, isModalVisible} = this.state;
@@ -133,11 +132,7 @@ class MenuFoods extends Component {
     );
 
     if (isLoading) {
-      foodsFlatList = (
-        <View style={spinner}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      );
+      foodsFlatList = <Spinner size="large" style="loading" />;
     } else if (foods.length === 0) {
       foodsFlatList = <EmptyData />;
     }

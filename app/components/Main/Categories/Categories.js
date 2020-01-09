@@ -1,17 +1,12 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import Category from './Category';
 import EmptyData from '../EmptyData';
 // import locale from 'react-native-locale-detector';
 import {withNamespaces} from 'react-i18next';
 import {getLanguageCode} from '../../../helpers';
 import {getApiCategories} from '../../../../api/categories';
+import Spinner from '../Spinner';
 
 class Categories extends Component {
   constructor(props) {
@@ -57,15 +52,11 @@ class Categories extends Component {
 
   render() {
     const {categories, isLoading} = this.state;
-    const {container, listCategories, spinner} = styles;
+    const {container, listCategories} = styles;
     const {navigation} = this.props;
 
     if (isLoading) {
-      return (
-        <View style={spinner}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      );
+      return <Spinner size="large" style="loading" />;
     }
 
     if (categories.length <= 0) {
@@ -98,10 +89,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-  },
-  spinner: {
-    flex: 1,
-    justifyContent: 'center',
   },
 });
 
