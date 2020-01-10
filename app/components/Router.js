@@ -12,7 +12,6 @@ import About from './Main/About/About';
 import ListRestaurants from './Main/ListRestaurants/ListRestaurants';
 import MenuFoods from './Main/MenuFoods/MenuFoods';
 import Menu from './Main/Menu/Menu';
-import Splash from './Splash';
 
 const {width} = Dimensions.get('window');
 // customize header react navigation
@@ -190,7 +189,6 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 const InitialNavigator = createSwitchNavigator({
-  Splash: Splash,
   App: DrawerNavigator,
 });
 

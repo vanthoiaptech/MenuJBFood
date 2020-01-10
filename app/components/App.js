@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Router from './Router';
 import {withNamespaces} from 'react-i18next';
 import {createAppContainer} from 'react-navigation';
+import SplashScreen from 'react-native-splash-screen';
 
 class WrappedStack extends Component {
   static router = Router.router;
@@ -17,6 +18,10 @@ const ReloadAppOnLanguageChange = withNamespaces('common', {
 })(createAppContainer(WrappedStack));
 
 class App extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+  }
+
   render() {
     return <ReloadAppOnLanguageChange />;
   }
