@@ -207,11 +207,26 @@ class MenuFoods extends Component {
     );
   };
 
+  styleCoverImage = imageName => {
+    let styleImg = {
+      width: width,
+      flex: 4,
+    };
+    if (imageName === 'default-restaurant.png') {
+      styleImg = {
+        flex: 4,
+        width: width,
+        resizeMode: 'contain',
+        margin: 20,
+      };
+    }
+    return styleImg;
+  };
+
   render() {
     const {
       container,
       banner,
-      bannerImg,
       contentWrapper,
       contentButton,
       contentText,
@@ -232,7 +247,7 @@ class MenuFoods extends Component {
         />
         <View style={banner}>
           <Image
-            style={bannerImg}
+            style={this.styleCoverImage(restaurant.image)}
             source={{uri: restaurantImageUrl(restaurant.image)}}
           />
           <View style={contentWrapper}>
@@ -272,10 +287,8 @@ const styles = StyleSheet.create({
   banner: {
     flex: 4,
     position: 'relative',
-  },
-  bannerImg: {
-    flex: 4,
-    width: width,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   contentWrapper: {
     position: 'absolute',

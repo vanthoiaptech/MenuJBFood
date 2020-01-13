@@ -29,6 +29,7 @@
   "common": {
     "empty data" : "Không có dữ liệu...",
     "setting": "Cài đặt",
-    "skip": "Bỏ qua"
+    "skip": "Bỏ qua",
+    "no internet connection": "Không có kết nối internet"
   }
 }

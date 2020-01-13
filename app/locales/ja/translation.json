@@ -29,6 +29,7 @@
   "common": {
     "empty data" : "データなし...",
     "setting": "セッティング",
-    "skip": "スキップ"
+    "skip": "スキップ",
+    "no internet connection": "インターネット接続なし"
   }
 }

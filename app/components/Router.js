@@ -12,6 +12,7 @@ import About from './Main/About/About';
 import ListRestaurants from './Main/ListRestaurants/ListRestaurants';
 import MenuFoods from './Main/MenuFoods/MenuFoods';
 import Menu from './Main/Menu/Menu';
+import OfflineNotice from './Main/OfflineNotice';
 
 const {width} = Dimensions.get('window');
 // customize header react navigation
@@ -24,6 +25,7 @@ const headerStyleCommon = {
             style={styles.logoImg}
             source={require('../images/logo_trang.png')}
           />
+          <OfflineNotice />
         </View>
       ),
       headerBackImage: () => (
@@ -210,6 +212,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     height: 60,
     justifyContent: 'center',
+    position: 'relative',
   },
   logoImg: {
     width: 50,

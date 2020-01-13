@@ -6,6 +6,7 @@ import {
   Image,
   Platform,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -29,20 +30,26 @@ class Maps extends Component {
       listRestaurants: [],
       marginTop: 0,
       languageCode: 'ja',
+      isLoading: false,
     };
   }
 
   getListRestaurants = () => {
+    this.setState({
+      isLoading: true,
+    });
     let {languageCode} = this.state;
     getApiRestaurants(languageCode, null)
       .then(listRestaurants =>
         this.setState({
           listRestaurants,
+          isLoading: false,
         }),
       )
       .catch(() =>
         this.setState({
           listRestaurants: [],
+          isLoading: false,
         }),
       );
   };
@@ -79,7 +86,11 @@ class Maps extends Component {
     }
   };
 
+  // get device location on the map
   locateCurrentPosition = () => {
+    this.setState({
+      isLoading: true,
+    });
     const {t} = this.props;
     LocationServicesDialogBox.checkLocationServicesIsEnabled({
       message: t('maps:propmt gps'),
@@ -99,15 +110,32 @@ class Maps extends Component {
               latitudeDelta: LATTITUDE_DELTA,
               longitudeDelta: LONGTITUDE_DELTA,
             };
-            this.setState({initialPosition});
+            this.setState({
+              initialPosition,
+              isLoading: false,
+            });
           },
-          error => console.log(error.message),
+          error => {
+            this.setState({isLoading: false});
+          },
           {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
         );
       })
       .catch(error => {
-        console.log(error.message);
+        this.setState({
+          isLoading: false,
+        });
       });
+  };
+
+  renderSpinner = () => {
+    if (this.state.isLoading) {
+      return (
+        <View>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    }
   };
 
   render() {
@@ -167,6 +195,7 @@ class Maps extends Component {
             </Marker>
           ))}
         </MapView>
+        {this.renderSpinner()}
       </View>
     );
   }
