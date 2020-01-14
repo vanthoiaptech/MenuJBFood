@@ -30,6 +30,8 @@
     "empty data": "No data available...",
     "setting": "Setting",
     "skip": "Skip",
-    "no internet connection": "No Internet Connection"
+    "no internet connection": "No Internet Connection",
+    "No internet connection. Make sure Wi-Fi or cellular data is turned on ,then try again": "No internet connection. Make sure Wi-Fi or cellular data is turned on ,then try again",
+    "retry": "Retry"
   }
 }

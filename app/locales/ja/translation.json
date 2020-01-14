@@ -30,6 +30,8 @@
     "empty data" : "データなし...",
     "setting": "セッティング",
     "skip": "スキップ",
-    "no internet connection": "インターネット接続なし"
+    "no internet connection": "インターネット接続なし",
+    "No internet connection. Make sure Wi-Fi or cellular data is turned on ,then try again": "インターネット接続なし. Wi-Fiまたは携帯電話のデータがオンになっていることを確認してください, その後、もう一度試してください",
+    "retry": "リトライ"
   }
 }

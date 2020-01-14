@@ -4,20 +4,22 @@ import {FlatList, SafeAreaView, RefreshControl} from 'react-native';
 import {getLanguageCode} from '../../../helpers';
 import Restaurant from './Restaurant';
 import EmptyData from '../EmptyData';
-import {getApiRestaurants} from '../../../../api/restaurants';
 import Spinner from '../Spinner';
+import Error from '../Error';
+import {domain} from '../../../constants/urlDefine';
 
 class ListRestaurants extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      languageCode: 'ja',
+      languageCode: '',
       listRestaurants: [],
       isLoading: false,
       hasScrolled: false,
       page: 1,
       restaurantNextPage: [],
       isRefreshing: false,
+      error: false,
     };
   }
 
@@ -28,26 +30,28 @@ class ListRestaurants extends Component {
   };
 
   // get restaurants data from backend
-  getListRestaurantsByCategoryId = id => {
-    const {languageCode, page, listRestaurants} = this.state;
+  getListRestaurantsByCategoryId = async id => {
     this.setState({isLoading: true});
-    getApiRestaurants(languageCode, id, page)
-      .then(restaurant =>
-        this.setState({
-          listRestaurants: [...listRestaurants, ...restaurant.data],
-          isLoading: false,
-          restaurantNextPage: restaurant.data,
-          isRefreshing: false,
-        }),
-      )
-      .catch(() => {
-        this.setState({
-          listRestaurants: [],
-          isLoading: false,
-          restaurantNextPage: [],
-          isRefreshing: false,
-        });
+    const {languageCode, page, listRestaurants} = this.state;
+    try {
+      let response = await fetch(
+        `${domain}/api/restaurants/${languageCode}/${id}?page=${page}`,
+      );
+      let responseJson = await response.json();
+      this.setState({
+        listRestaurants: [...listRestaurants, ...responseJson.data],
+        isLoading: false,
+        restaurantNextPage: responseJson.data,
+        isRefreshing: false,
+        error: false,
       });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        error: true,
+        isRefreshing: false,
+      });
+    }
   };
 
   async componentDidMount() {
@@ -90,7 +94,7 @@ class ListRestaurants extends Component {
   };
 
   // handle refresh restaurants data
-  onRefresh = () => {
+  onRefresh = async () => {
     const {categoryId} = this.props.navigation.state.params;
     const {languageCode} = this.state;
     this.setState({
@@ -98,20 +102,27 @@ class ListRestaurants extends Component {
       page: 1,
     });
 
-    getApiRestaurants(languageCode, categoryId, 1)
-      .then(restaurant =>
-        this.setState({
-          listRestaurants: restaurant.data,
-          restaurantNextPage: restaurant.data,
-          isRefreshing: false,
-        }),
-      )
-      .catch(() => {
-        this.setState({
-          listRestaurants: [],
-          isRefreshing: false,
-        });
+    try {
+      let response = await fetch(
+        `${domain}/api/restaurants/${languageCode}/${categoryId}?page=1`,
+      );
+      let responseJson = await response.json();
+      this.setState({
+        listRestaurants: responseJson.data,
+        restaurantNextPage: responseJson.data,
+        isLoading: false,
+        isRefreshing: false,
+        error: false,
       });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        error: true,
+        isRefreshing: false,
+        listRestaurants: [],
+        restaurantNextPage: [],
+      });
+    }
   };
 
   // spinner load more data
@@ -124,10 +135,17 @@ class ListRestaurants extends Component {
 
   render() {
     const {navigation} = this.props;
-    const {listRestaurants, isLoading, page} = this.state;
+    const {listRestaurants, isLoading, page, error} = this.state;
+    const {categoryId} = this.props.navigation.state.params;
 
     if (isLoading && page === 1) {
       return <Spinner size="large" style="loading" />;
+    }
+
+    if (error) {
+      return (
+        <Error retry={() => this.getListRestaurantsByCategoryId(categoryId)} />
+      );
     }
 
     if (listRestaurants.length <= 0) {

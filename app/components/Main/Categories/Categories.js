@@ -5,8 +5,9 @@ import EmptyData from '../EmptyData';
 // import locale from 'react-native-locale-detector';
 import {withNamespaces} from 'react-i18next';
 import {getLanguageCode} from '../../../helpers';
-import {getApiCategories} from '../../../../api/categories';
 import Spinner from '../Spinner';
+import Error from '../Error';
+import {domain} from '../../../constants/urlDefine';
 
 class Categories extends Component {
   constructor(props) {
@@ -14,26 +15,28 @@ class Categories extends Component {
     this.state = {
       languageCode: '',
       categories: [],
-      isLoading: true,
+      isLoading: false,
+      error: false,
     };
   }
 
-  getCategoriesData = () => {
+  getCategoriesData = async () => {
+    this.setState({isLoading: true});
     const {languageCode} = this.state;
-
-    getApiCategories(languageCode)
-      .then(categories =>
-        this.setState({
-          categories,
-          isLoading: false,
-        }),
-      )
-      .catch(() =>
-        this.setState({
-          categories: [],
-          isLoading: false,
-        }),
-      );
+    try {
+      let response = await fetch(`${domain}/api/categories/${languageCode}`);
+      let categories = await response.json();
+      this.setState({
+        categories,
+        isLoading: false,
+        error: false,
+      });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        error: true,
+      });
+    }
   };
 
   async componentDidMount() {
@@ -53,12 +56,16 @@ class Categories extends Component {
   }
 
   render() {
-    const {categories, isLoading} = this.state;
+    const {categories, isLoading, error} = this.state;
     const {container, listCategories} = styles;
     const {navigation} = this.props;
 
     if (isLoading) {
       return <Spinner size="large" style="loading" />;
+    }
+
+    if (error) {
+      return <Error retry={() => this.getCategoriesData()} />;
     }
 
     if (categories.length <= 0) {

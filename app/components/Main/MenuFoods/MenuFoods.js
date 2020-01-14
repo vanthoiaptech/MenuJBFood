@@ -19,9 +19,10 @@ import Food from './Food';
 import i18n from '../../../utils/i18n';
 import EmptyData from '../EmptyData';
 import FoodModal from './FoodModal';
-import {getApiFoodsByRestaurant} from '../../../../api/foods';
 import {restaurantImageUrl} from '../../../constants/urlDefine';
+import {domain} from '../../../constants/urlDefine';
 import Spinner from '../Spinner';
+import Error from '../Error';
 
 const {width} = Dimensions.get('window');
 
@@ -38,6 +39,7 @@ class MenuFoods extends Component {
       page: 1,
       hasScrolled: false,
       isRefreshing: false,
+      error: false,
     };
   }
 
@@ -48,25 +50,26 @@ class MenuFoods extends Component {
   };
 
   // get foods data from backend
-  getFoodsByRestaurantId = id => {
+  getFoodsByRestaurantId = async id => {
+    this.setState({isLoading: true});
     let {languageCode, page, foods} = this.state;
-    this.setState({
-      isLoading: true,
-    });
-    getApiFoodsByRestaurant(id, languageCode, page)
-      .then(res =>
-        this.setState({
-          foods: [...foods, ...res.data],
-          foodsNextPage: res.data,
-          isLoading: false,
-        }),
-      )
-      .catch(() =>
-        this.setState({
-          foods: [],
-          isLoading: false,
-        }),
+    try {
+      let response = await fetch(
+        `${domain}/api/foods/${id}/${languageCode}?page=${page}`,
       );
+      let responseJson = await response.json();
+      this.setState({
+        foods: [...foods, ...responseJson.data],
+        foodsNextPage: responseJson.data,
+        isLoading: false,
+        error: false,
+      });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        error: true,
+      });
+    }
   };
 
   async componentDidMount() {
@@ -145,7 +148,7 @@ class MenuFoods extends Component {
     });
   };
 
-  onRefresh = () => {
+  onRefresh = async () => {
     this.setState({
       isRefreshing: true,
       page: 1,
@@ -153,26 +156,36 @@ class MenuFoods extends Component {
 
     const {restaurant} = this.props.navigation.state.params;
     const {languageCode} = this.state;
-    getApiFoodsByRestaurant(restaurant.id, languageCode, 1)
-      .then(res =>
-        this.setState({
-          foods: res.data,
-          foodsNextPage: res.data,
-          isRefreshing: false,
-        }),
-      )
-      .catch(() =>
-        this.setState({
-          foods: [],
-          isRefreshing: false,
-        }),
+    try {
+      let response = await fetch(
+        `${domain}/api/foods/${restaurant.id}/${languageCode}?page=1`,
       );
+      let responseJson = await response.json();
+      this.setState({
+        foods: responseJson.data,
+        foodsNextPage: responseJson.data,
+        isRefreshing: false,
+        error: false,
+      });
+    } catch (error) {
+      this.setState({
+        foods: [],
+        foodsNextPage: [],
+        isRefreshing: false,
+        error: true,
+      });
+    }
   };
 
   renderFoodsFlatList = () => {
-    const {foods, isLoading, page} = this.state;
+    const {foods, isLoading, page, error} = this.state;
+    const {restaurant} = this.props.navigation.state.params;
     if (isLoading && page === 1) {
       return <Spinner size="large" style="loading" />;
+    }
+
+    if (error) {
+      return <Error retry={() => this.getFoodsByRestaurantId(restaurant.id)} />;
     }
 
     if (foods.length <= 0) {

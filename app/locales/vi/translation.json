@@ -30,6 +30,8 @@
     "empty data" : "Không có dữ liệu...",
     "setting": "Cài đặt",
     "skip": "Bỏ qua",
-    "no internet connection": "Không có kết nối internet"
+    "no internet connection": "Không có kết nối internet",
+    "No internet connection. Make sure Wi-Fi or cellular data is turned on ,then try again": "Không có kết nối để tải dữ liệu. Vui lòng kiểm tra kết nối Wi-Fi hoặc dữ liệu di động, sau đó thử lại!",
+    "retry": "Thử lại"
   }
 }

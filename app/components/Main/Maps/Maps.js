@@ -16,7 +16,7 @@ import {getLanguageCode} from '../../../helpers';
 import {Icon} from 'react-native-elements';
 import {withNamespaces} from 'react-i18next';
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
-import {getApiRestaurants} from '../../../../api/restaurants';
+import {domain} from '../../../constants/urlDefine';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -34,24 +34,22 @@ class Maps extends Component {
     };
   }
 
-  getListRestaurants = () => {
-    this.setState({
-      isLoading: true,
-    });
+  getListRestaurants = async () => {
+    this.setState({isLoading: true});
     let {languageCode} = this.state;
-    getApiRestaurants(languageCode, null)
-      .then(listRestaurants =>
-        this.setState({
-          listRestaurants,
-          isLoading: false,
-        }),
-      )
-      .catch(() =>
-        this.setState({
-          listRestaurants: [],
-          isLoading: false,
-        }),
-      );
+    try {
+      let response = await fetch(`${domain}/api/restaurants/${languageCode}`);
+      let listRestaurants = await response.json();
+      this.setState({
+        listRestaurants,
+        isLoading: false,
+      });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        listRestaurants: [],
+      });
+    }
   };
 
   async componentDidMount() {
@@ -88,9 +86,7 @@ class Maps extends Component {
 
   // get device location on the map
   locateCurrentPosition = () => {
-    this.setState({
-      isLoading: true,
-    });
+    this.setState({isLoading: true});
     const {t} = this.props;
     LocationServicesDialogBox.checkLocationServicesIsEnabled({
       message: t('maps:propmt gps'),
