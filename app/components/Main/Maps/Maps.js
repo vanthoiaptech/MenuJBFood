@@ -31,6 +31,7 @@ class Maps extends Component {
       marginTop: 0,
       languageCode: 'ja',
       isLoading: false,
+      geolocationError: false,
     };
   }
 
@@ -84,11 +85,14 @@ class Maps extends Component {
     }
   };
 
+  watchID: ?number = null;
+
   // get device location on the map
   locateCurrentPosition = () => {
     this.setState({isLoading: true});
     const {t} = this.props;
     LocationServicesDialogBox.checkLocationServicesIsEnabled({
+      //turn on the dialog box from android location services
       message: t('maps:propmt gps'),
       ok: t('common:setting'),
       cancel: t('common:skip'),
@@ -116,6 +120,25 @@ class Maps extends Component {
           },
           {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
         );
+
+        this.watchID = Geolocation.watchPosition(
+          position => {
+            let initialPosition = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              latitudeDelta: LATTITUDE_DELTA,
+              longitudeDelta: LONGTITUDE_DELTA,
+            };
+            this.setState({
+              initialPosition,
+              isLoading: false,
+            });
+          },
+          error => {
+            this.setState({isLoading: false});
+          },
+          {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+        );
       })
       .catch(error => {
         this.setState({
@@ -123,6 +146,10 @@ class Maps extends Component {
         });
       });
   };
+
+  componentWillUnmount() {
+    this.watchID != null && Geolocation.clearWatch(this.watchID);
+  }
 
   renderSpinner = () => {
     if (this.state.isLoading) {
