@@ -3,6 +3,7 @@ import Router from './Router';
 import {withNamespaces} from 'react-i18next';
 import {createAppContainer} from 'react-navigation';
 import SplashScreen from 'react-native-splash-screen';
+import PushNotification from 'react-native-push-notification';
 
 class WrappedStack extends Component {
   static router = Router.router;
@@ -18,8 +19,14 @@ const ReloadAppOnLanguageChange = withNamespaces('common', {
 })(createAppContainer(WrappedStack));
 
 class App extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     SplashScreen.hide();
+
+    PushNotification.configure({
+      onNotification: function(notification) {
+        console.log('NOTIFICATION:', notification);
+      },
+    });
   }
 
   render() {

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "831086411403",
+    "firebase_url": "https://menujbfood.firebaseio.com",
+    "project_id": "menujbfood",
+    "storage_bucket": "menujbfood.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831086411403:android:baab852a276dcd685e9e8e",
+        "android_client_info": {
+          "package_name": "com.menu_jb_food"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831086411403-ssd9fmucteu4mnkkqr1fa5qqfk3djscd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWjzo_ShbZGtqBP0YO36zbh6sYFUKsf0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831086411403-ssd9fmucteu4mnkkqr1fa5qqfk3djscd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
