@@ -7,6 +7,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import i18n from '../../../utils/i18n';
 import RNRestart from 'react-native-restart';
 import {getLanguageCode} from '../../../helpers';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {
+  AccessToken,
+  LoginManager,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
 
 class Menu extends Component {
   constructor(props) {
@@ -48,7 +55,56 @@ class Menu extends Component {
       .catch(err => console.log(err));
   }
 
+  loginFacebook = async () => {
+    LoginManager.logInWithPermissions(['public_profile'])
+      .then(result => {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          AccessToken.getCurrentAccessToken()
+            .then(user => {
+              return user;
+            })
+            .then(user => {
+              const responseInfoCallback = (error, response) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log(response);
+                }
+              };
+
+              const infoRequest = new GraphRequest(
+                '/me',
+                {
+                  accessToken: user.accessToken,
+                  parameters: {
+                    fields: {
+                      string:
+                        'email,name,first_name,last_name,picture.type(large)',
+                    },
+                  },
+                },
+                responseInfoCallback,
+              );
+              // Start the graph request.
+              new GraphRequestManager().addRequest(infoRequest).start();
+            });
+        }
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  };
+
+  logout = () => {
+    LoginManager.logOut();
+  };
+
   render() {
+    console.log(this.state.isAuthenticated);
+    console.log(this.state.userInfo);
+
     const {
       container,
       menuItem,
@@ -58,6 +114,9 @@ class Menu extends Component {
       menuWrapper,
       text,
       ensignIcon,
+      loginButton,
+      facebookButton,
+      loginButtonTitle,
     } = styles;
     const {t} = this.props;
     return (
@@ -106,6 +165,22 @@ class Menu extends Component {
             <Text style={menuText}>{t('language_setting:english')}</Text>
             {this.showChecked('en')}
           </TouchableOpacity>
+          <FontAwesome.Button
+            name="sign-out"
+            backgroundColor="transparent"
+            color="#545659"
+            onPress={this.logout}>
+            <Text style={menuText}>Logout</Text>
+          </FontAwesome.Button>
+        </View>
+        <View style={loginButton}>
+          <FontAwesome.Button
+            name="facebook"
+            style={facebookButton}
+            backgroundColor="#3b5998"
+            onPress={this.loginFacebook}>
+            <Text style={loginButtonTitle}>Login with Facebook</Text>
+          </FontAwesome.Button>
         </View>
       </View>
     );
@@ -122,7 +197,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   menuWrapper: {
-    flex: 8,
+    flex: 4,
   },
   menuItem: {
     flexDirection: 'row',
@@ -151,6 +226,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 25,
     height: 20,
+  },
+  loginButton: {
+    flex: 5,
+    marginHorizontal: 20,
+  },
+  facebookButton: {
+    height: 45,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginButtonTitle: {
+    fontSize: 16,
+    color: 'white',
   },
 });
 

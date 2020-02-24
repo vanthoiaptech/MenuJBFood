@@ -87,6 +87,7 @@
       <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDWjzo_ShbZGtqBP0YO36zbh6sYFUKsf0g"/> <!-- api key google maps -->
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
