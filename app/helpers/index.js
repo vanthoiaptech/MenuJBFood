@@ -1,9 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-} from 'react-native-fbsdk';
 
 /**
  * get @languageCode from AsyncStorage

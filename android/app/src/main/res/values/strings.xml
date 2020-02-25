@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">JMFood</string>
     <string name="facebook_app_id">2763325970450048</string>
+    <string name="server_client_id">831086411403-vl8s60r47p5fca9a196qm493p3ua5ttl.apps.googleusercontent.com</string>
 </resources>

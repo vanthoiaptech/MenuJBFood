@@ -15,6 +15,7 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 import globals from '../../globals';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 
 class Menu extends Component {
   constructor(props) {
@@ -60,6 +61,11 @@ class Menu extends Component {
         }),
       )
       .catch(err => console.log(err));
+    GoogleSignin.configure({
+      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+      webClientId:
+        '831086411403-vl8s60r47p5fca9a196qm493p3ua5ttl.apps.googleusercontent.com',
+    });
   }
 
   loginFacebook = async () => {
@@ -104,6 +110,26 @@ class Menu extends Component {
       });
   };
 
+  loginGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      this.setState({user: userInfo.user});
+    } catch (error) {
+      console.log(error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('SIGN_IN_CANCELLED');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log('IN_PROGRESS');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('PLAY_SERVICES_NOT_AVAILABLE');
+      } else {
+        console.log('Other');
+      }
+    }
+  };
+
   logout = () => {
     LoginManager.logOut();
     this.setState({user: null});
@@ -121,22 +147,30 @@ class Menu extends Component {
       text,
       ensignIcon,
       loginButton,
-      facebookButton,
+      button,
       loginButtonTitle,
+      divider,
     } = styles;
     const {t} = this.props;
     const {user} = this.state;
 
     let facebookButtonJSX = (
-      <View style={loginButton}>
-        <FontAwesome.Button
-          name="facebook"
-          style={facebookButton}
-          backgroundColor="#3b5998"
-          onPress={this.loginFacebook}>
-          <Text style={loginButtonTitle}>Login with Facebook</Text>
-        </FontAwesome.Button>
-      </View>
+      <FontAwesome.Button
+        name="facebook"
+        style={button}
+        backgroundColor="#3A63BF"
+        onPress={this.loginFacebook}>
+        <Text style={loginButtonTitle}>Login with Facebook</Text>
+      </FontAwesome.Button>
+    );
+    let googleButtonJSX = (
+      <FontAwesome.Button
+        name="google"
+        style={button}
+        backgroundColor="#C94131"
+        onPress={this.loginGoogle}>
+        <Text style={loginButtonTitle}>Login with Google</Text>
+      </FontAwesome.Button>
     );
     let logoutJSX = (
       <FontAwesome.Button
@@ -149,10 +183,15 @@ class Menu extends Component {
     );
 
     facebookButtonJSX = !user ? facebookButtonJSX : null;
+    googleButtonJSX = !user ? googleButtonJSX : null;
     logoutJSX = user ? logoutJSX : null;
-    const avatarJSX = (
-      <Image style={avatar} source={{uri: user ? user.picture.data.url : ''}} />
-    );
+    var avatarUrl;
+    if (user && user.photo) {
+      avatarUrl = user.photo;
+    } else if (user && user.picture) {
+      avatarUrl = user.picture.data.url;
+    }
+    const avatarJSX = <Image style={avatar} source={{uri: avatarUrl}} />;
     const logoJSX = (
       <Image style={logoMenu} source={require('../../../images/LOGO.png')} />
     );
@@ -202,7 +241,11 @@ class Menu extends Component {
           </TouchableOpacity>
           {logoutJSX}
         </View>
-        {facebookButtonJSX}
+        <View style={loginButton}>
+          {facebookButtonJSX}
+          <View style={divider} />
+          {googleButtonJSX}
+        </View>
       </View>
     );
   }
@@ -262,8 +305,8 @@ const styles = StyleSheet.create({
     flex: 5,
     marginHorizontal: 20,
   },
-  facebookButton: {
-    height: 45,
+  button: {
+    height: 40,
     borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
@@ -271,6 +314,9 @@ const styles = StyleSheet.create({
   loginButtonTitle: {
     fontSize: 16,
     color: 'white',
+  },
+  divider: {
+    height: 5,
   },
 });
 
