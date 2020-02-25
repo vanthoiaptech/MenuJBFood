@@ -14,21 +14,28 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from 'react-native-fbsdk';
+import globals from '../../globals';
 
 class Menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
       languageCode: 'ja',
+      user: null,
     };
+    globals.onSignIn = this.onSignIn.bind(this);
   }
+
+  onSignIn = user => {
+    this.setState({user});
+  };
 
   async onChangeLanguage(lang) {
     i18n.changeLanguage(lang);
     try {
       await AsyncStorage.setItem('@languageCode', lang);
     } catch (error) {
-      console.log(error);
+      this.setState({languageCode: 'ja'});
     }
     RNRestart.Restart();
   }
@@ -68,9 +75,9 @@ class Menu extends Component {
             .then(user => {
               const responseInfoCallback = (error, response) => {
                 if (error) {
-                  console.log(error);
+                  this.setState({user: null});
                 } else {
-                  console.log(response);
+                  this.setState({user: response});
                 }
               };
 
@@ -99,18 +106,17 @@ class Menu extends Component {
 
   logout = () => {
     LoginManager.logOut();
+    this.setState({user: null});
   };
 
   render() {
-    console.log(this.state.isAuthenticated);
-    console.log(this.state.userInfo);
-
     const {
       container,
       menuItem,
       menuText,
       menuBanner,
       logoMenu,
+      avatar,
       menuWrapper,
       text,
       ensignIcon,
@@ -119,20 +125,49 @@ class Menu extends Component {
       loginButtonTitle,
     } = styles;
     const {t} = this.props;
+    const {user} = this.state;
+
+    let facebookButtonJSX = (
+      <View style={loginButton}>
+        <FontAwesome.Button
+          name="facebook"
+          style={facebookButton}
+          backgroundColor="#3b5998"
+          onPress={this.loginFacebook}>
+          <Text style={loginButtonTitle}>Login with Facebook</Text>
+        </FontAwesome.Button>
+      </View>
+    );
+    let logoutJSX = (
+      <FontAwesome.Button
+        name="sign-out"
+        backgroundColor="transparent"
+        color="#545659"
+        onPress={this.logout}>
+        <Text style={menuText}>Logout</Text>
+      </FontAwesome.Button>
+    );
+
+    facebookButtonJSX = !user ? facebookButtonJSX : null;
+    logoutJSX = user ? logoutJSX : null;
+    const avatarJSX = (
+      <Image style={avatar} source={{uri: user ? user.picture.data.url : ''}} />
+    );
+    const logoJSX = (
+      <Image style={logoMenu} source={require('../../../images/LOGO.png')} />
+    );
+
     return (
       <View style={container}>
         <LinearGradient
           start={{x: 0.0, y: 0.25}}
           end={{x: 1, y: 3.0}}
           locations={[0, 0.5, 0.6]}
-          colors={['#01AF51', '#36C075', '#7ED0A3']}
+          colors={['#FFF', '#36C075', '#7ED0A3']}
           style={menuBanner}>
-          <Image
-            style={logoMenu}
-            source={require('../../../images/LOGO.png')}
-          />
-          <Text style={text}>MENU JP FOOD</Text>
-          <Text style={text}>レストランメニュー</Text>
+          {user ? avatarJSX : logoJSX}
+          <Text style={text}>{user ? user.name : 'MENU JP FOOD'}</Text>
+          <Text style={text}>{user ? '' : 'レストランメニュー'}</Text>
         </LinearGradient>
         <View style={menuWrapper}>
           <TouchableOpacity
@@ -165,23 +200,9 @@ class Menu extends Component {
             <Text style={menuText}>{t('language_setting:english')}</Text>
             {this.showChecked('en')}
           </TouchableOpacity>
-          <FontAwesome.Button
-            name="sign-out"
-            backgroundColor="transparent"
-            color="#545659"
-            onPress={this.logout}>
-            <Text style={menuText}>Logout</Text>
-          </FontAwesome.Button>
+          {logoutJSX}
         </View>
-        <View style={loginButton}>
-          <FontAwesome.Button
-            name="facebook"
-            style={facebookButton}
-            backgroundColor="#3b5998"
-            onPress={this.loginFacebook}>
-            <Text style={loginButtonTitle}>Login with Facebook</Text>
-          </FontAwesome.Button>
-        </View>
+        {facebookButtonJSX}
       </View>
     );
   }
@@ -193,7 +214,8 @@ const styles = StyleSheet.create({
   },
   menuBanner: {
     flex: 2,
-    padding: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 30,
     justifyContent: 'center',
   },
   menuWrapper: {
@@ -219,8 +241,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     resizeMode: 'center',
   },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 120 / 2,
+    resizeMode: 'cover',
+    borderColor: '#FFF',
+    borderWidth: 2,
+  },
   text: {
-    color: '#FFF',
+    paddingTop: 3,
+    color: '#575A63',
   },
   ensignIcon: {
     flex: 1,
