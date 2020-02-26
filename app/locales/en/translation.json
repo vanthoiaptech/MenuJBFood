@@ -33,5 +33,13 @@
     "no internet connection": "No Internet Connection",
     "No internet connection. Make sure Wi-Fi or cellular data is turned on ,then try again": "No internet connection. Make sure Wi-Fi or cellular data is turned on ,then try again",
     "retry": "Retry"
+  },
+  "auth": {
+    "login with facebook": "Login with Facebook",
+    "login with google": "Login with Google",
+    "logout": "Log Out",
+    "do you want to logout": "Do you want to logout JMFood?",
+    "cancle": "Cancle",
+    "ok": "OK"
   }
 }
