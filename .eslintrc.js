@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     semi: 1,
     quotes: [1, 'single'],
-    'react/jsx-uses-vars': 1
+    'react/jsx-uses-vars': 1,
+    curly: [1, "all"],
   }
 };

@@ -23,6 +23,7 @@ import {
 } from 'react-native-fbsdk';
 import globals from '../../globals';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import {domain} from '../../../constants/urlDefine';
 
 class Menu extends Component {
   constructor(props) {
@@ -69,12 +70,8 @@ class Menu extends Component {
 
   componentDidMount() {
     getLanguageCode()
-      .then(res =>
-        this.setState({
-          languageCode: res,
-        }),
-      )
-      .catch(err => console.log(err));
+      .then(res => this.setState({languageCode: res}))
+      .catch(() => this.setState({languageCode: 'ja'}));
   }
 
   /**
@@ -92,28 +89,29 @@ class Menu extends Component {
   Handle login with facebook
   */
   loginFacebook = async () => {
-    LoginManager.logInWithPermissions(['public_profile'])
-      .then(result => {
+    try {
+      LoginManager.logInWithPermissions(['public_profile']).then(result => {
         if (result.isCancelled) {
-          console.log('Login cancelled');
-        } else {
-          AccessToken.getCurrentAccessToken()
-            .then(user => {
-              return user;
-            })
-            .then(user => {
-              const responseInfoCallback = (error, response) => {
-                if (error) {
-                  this.setState({user: null, isSignedIn: false});
-                } else {
-                  this.setState({user: response, isSignedIn: true});
-                }
-              };
-
+          this.showSignInError('Login cancelled');
+        }
+        AccessToken.getCurrentAccessToken()
+          .then(profile => {
+            return profile;
+          })
+          .then(profile => {
+            const responseInfoCallback = (error, response) => {
+              if (error) {
+                this.showSignInError(JSON.stringify(error));
+              } else {
+                this.fetchLoginedUser(profile.accessToken, 'facebook');
+                this.setState({user: response, isSignedIn: true});
+              }
+            };
+            if (profile) {
               const infoRequest = new GraphRequest(
                 '/me',
                 {
-                  accessToken: user.accessToken,
+                  accessToken: profile.accessToken,
                   parameters: {
                     fields: {
                       string:
@@ -125,12 +123,12 @@ class Menu extends Component {
               );
               // Start the graph request.
               new GraphRequestManager().addRequest(infoRequest).start();
-            });
-        }
-      })
-      .catch(error => {
-        this.showSignInError(JSON.stringify(error));
+            }
+          });
       });
+    } catch (error) {
+      this.showSignInError(JSON.stringify(error));
+    }
   };
 
   /**
@@ -140,6 +138,7 @@ class Menu extends Component {
     try {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
+      this.fetchLoginedUser(response.idToken, 'google');
       this.setState({
         user: response.user,
         isSignedIn: true,
@@ -147,6 +146,36 @@ class Menu extends Component {
       });
     } catch (error) {
       this.handleSignInError(error);
+    }
+  };
+
+  /**
+  fetch logined user to api (save database)
+  @param profile, provider
+  @return object
+ */
+  fetchLoginedUser = async (socialToken, provider) => {
+    try {
+      let response = await fetch(`${domain}/api/clients/login/${provider}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          social_token: socialToken,
+        }),
+      });
+      let responseJson = await response.json();
+      return responseJson;
+    } catch (error) {
+      const {isSignedInGoogle} = this.state;
+      if (isSignedInGoogle) {
+        this.logoutGoogle();
+      } else {
+        this.logoutFaceBook();
+      }
+      this.handleSignInError(JSON.stringify(error));
     }
   };
 
@@ -159,7 +188,7 @@ class Menu extends Component {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         this.showSignInError('User cancelled the login flow.');
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        this.showSignInError('Sign in is in progress. ');
+        this.showSignInError('Sign in is in progress.');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         await this.getGooglePlayServices();
       } else {
@@ -234,7 +263,7 @@ class Menu extends Component {
         isSignedInGoogle: false,
       });
     } catch (error) {
-      console.log(error);
+      this.showSignInError(JSON.stringify(error));
     }
   };
 
