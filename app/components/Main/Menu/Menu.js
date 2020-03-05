@@ -89,46 +89,57 @@ class Menu extends Component {
   Handle login with facebook
   */
   loginFacebook = async () => {
+    const {t} = this.props;
     try {
       LoginManager.logInWithPermissions(['public_profile']).then(result => {
         if (result.isCancelled) {
           this.showSignInError('Login cancelled');
+        } else {
+          this.getProfileFaceBook();
         }
-        AccessToken.getCurrentAccessToken()
-          .then(profile => {
-            return profile;
-          })
-          .then(profile => {
-            const responseInfoCallback = (error, response) => {
-              if (error) {
-                this.showSignInError(JSON.stringify(error));
-              } else {
-                this.fetchLoginedUser(profile.accessToken, 'facebook');
-                this.setState({user: response, isSignedIn: true});
-              }
-            };
-            if (profile) {
-              const infoRequest = new GraphRequest(
-                '/me',
-                {
-                  accessToken: profile.accessToken,
-                  parameters: {
-                    fields: {
-                      string:
-                        'email,name,first_name,last_name,picture.type(large)',
-                    },
-                  },
-                },
-                responseInfoCallback,
-              );
-              // Start the graph request.
-              new GraphRequestManager().addRequest(infoRequest).start();
-            }
-          });
       });
     } catch (error) {
-      this.showSignInError(JSON.stringify(error));
+      this.showSignInError(t('auth:An error occurred. Please try again later'));
     }
+  };
+
+  /**
+    get signed user info from facebook
+  */
+  getProfileFaceBook = () => {
+    const {t} = this.props;
+    AccessToken.getCurrentAccessToken()
+      .then(profile => {
+        return profile;
+      })
+      .then(profile => {
+        const responseInfoCallback = (error, response) => {
+          if (error) {
+            this.showSignInError(
+              t('auth:An error occurred. Please try again later'),
+            );
+          } else {
+            this.setState({user: response, isSignedIn: true});
+            this.fetchLoginedUser(profile.accessToken, 'facebook');
+          }
+        };
+        if (profile) {
+          const infoRequest = new GraphRequest(
+            '/me',
+            {
+              accessToken: profile.accessToken,
+              parameters: {
+                fields: {
+                  string: 'email,name,first_name,last_name,picture.type(large)',
+                },
+              },
+            },
+            responseInfoCallback,
+          );
+          // Start the graph request.
+          new GraphRequestManager().addRequest(infoRequest).start();
+        }
+      });
   };
 
   /**
@@ -138,12 +149,12 @@ class Menu extends Component {
     try {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
-      this.fetchLoginedUser(response.idToken, 'google');
       this.setState({
         user: response.user,
         isSignedIn: true,
         isSignedInGoogle: true,
       });
+      this.fetchLoginedUser(response.idToken, 'google');
     } catch (error) {
       this.handleSignInError(error);
     }
@@ -151,32 +162,26 @@ class Menu extends Component {
 
   /**
   fetch logined user to api (save database)
-  @param profile, provider
+  @param string socialToken, provider
   @return object
  */
   fetchLoginedUser = async (socialToken, provider) => {
-    try {
-      let response = await fetch(`${domain}/api/clients/login/${provider}`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          social_token: socialToken,
-        }),
+    let data = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        social_token: socialToken,
+      }),
+    };
+
+    return await fetch(`${domain}/api/auth/login/${provider}`, data)
+      .then(response => response.json())
+      .then(responseJson => {
+        return responseJson;
       });
-      let responseJson = await response.json();
-      return responseJson;
-    } catch (error) {
-      const {isSignedInGoogle} = this.state;
-      if (isSignedInGoogle) {
-        this.logoutGoogle();
-      } else {
-        this.logoutFaceBook();
-      }
-      this.handleSignInError(JSON.stringify(error));
-    }
   };
 
   /**
@@ -184,6 +189,7 @@ class Menu extends Component {
     @param error the SignIn error object
    */
   handleSignInError = async error => {
+    const {t} = this.props;
     if (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         this.showSignInError('User cancelled the login flow.');
@@ -192,10 +198,12 @@ class Menu extends Component {
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         await this.getGooglePlayServices();
       } else {
-        this.showSignInError(JSON.stringify(error));
+        this.showSignInError(
+          t('auth:An error occurred. Please try again later'),
+        );
       }
     } else {
-      this.showSignInError(JSON.stringify(error));
+      this.showSignInError(t('auth:An error occurred. Please try again later'));
     }
   };
 
@@ -203,17 +211,23 @@ class Menu extends Component {
   Checks if device has Google Play Services installed
  */
   getGooglePlayServices = async () => {
+    const {t} = this.props;
     try {
       await GoogleSignin.hasPlayServices({
         showPlayServicesUpdateDialog: true,
       });
     } catch (error) {
-      this.showSignInError('Google play services are not available');
+      this.showSignInError(t('auth:Google play services are not available'));
     }
   };
 
+  /**
+    show error when sign in failed
+    @param string message
+   */
   showSignInError = message => {
-    Alert.alert('Signin Error', message, [{text: 'OK'}], {
+    const {t} = this.props;
+    Alert.alert(t('auth:Signin error'), message, [{text: 'OK'}], {
       cancelable: false,
     });
   };
@@ -244,8 +258,11 @@ class Menu extends Component {
     );
   };
 
+  /**
+    logout with facebook
+   */
   logoutFaceBook = () => {
-    LoginManager.logOut(); // logout facebook
+    LoginManager.logOut();
     this.setState({
       user: null,
       isSignedIn: false,
@@ -253,10 +270,13 @@ class Menu extends Component {
     });
   };
 
+  /**
+    logout with google
+   */
   logoutGoogle = async () => {
     try {
       // await GoogleSignin.revokeAccess(); //Removes your application from the user authorized applications.
-      await GoogleSignin.signOut(); // logout google
+      await GoogleSignin.signOut();
       this.setState({
         user: null,
         isSignedIn: false,

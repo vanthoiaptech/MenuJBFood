@@ -40,6 +40,9 @@
     "logout": "Log Out",
     "do you want to logout": "Do you want to logout JMFood?",
     "cancle": "Cancle",
-    "ok": "OK"
+    "ok": "OK",
+    "Signin error": "Signin error",
+    "An error occurred. Please try again later": "An error occurred. Please try again later!",
+    "Google play services are not available": "Google play services are not available!"
   }
 }

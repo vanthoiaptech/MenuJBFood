@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   RefreshControl,
 } from 'react-native';
-// import locale from 'react-native-locale-detector';
 import {getLanguageCode} from '../../../helpers';
 import Food from './Food';
 import i18n from '../../../utils/i18n';

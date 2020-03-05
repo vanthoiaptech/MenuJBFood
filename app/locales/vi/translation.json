@@ -40,6 +40,9 @@
     "logout": "Đăng xuất",
     "do you want to logout": "Bạn có muốn đăng xuất khỏi JMFood?",
     "cancle": "Hủy",
-    "ok": "Đồng ý"
+    "ok": "Đồng ý",
+    "Signin error" : "Lỗi đăng nhập",
+    "An error occurred. Please try again later": "Có lỗi xảy ra. Vui lòng thử lại sau!",
+    "Google play services are not available": "Dịch vụ Google play không khả dụng!"
   }
 }

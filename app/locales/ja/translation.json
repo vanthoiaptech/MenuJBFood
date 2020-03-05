@@ -40,6 +40,9 @@
     "logout": "ログアウト",
     "do you want to logout": "JMFoodをログアウトしますか？",
     "cancle": "キャンクル",
-    "ok": "よし"
+    "ok": "よし",
+    "Signin error" : "サインインエラー",
+    "An error occurred. Please try again later": "エラーが発生しました。 後でもう一度やり直してください!",
+    "Google play services are not available": "Google Playサービスは利用できません!"
   }
 }
