@@ -12,6 +12,7 @@ import {
 } from 'react-native-fbsdk';
 import {GoogleSignin} from '@react-native-community/google-signin';
 import globals from './globals';
+import codePush from 'react-native-code-push';
 
 class WrappedStack extends Component {
   static router = Router.router;
@@ -115,4 +116,8 @@ class App extends Component {
   }
 }
 
-export default App;
+let codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+  installMode: codePush.InstallMode.IMMEDIATE,
+};
+export default codePush(codePushOptions)(App);

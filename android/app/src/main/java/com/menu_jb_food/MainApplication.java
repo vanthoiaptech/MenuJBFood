@@ -14,6 +14,7 @@ import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.microsoft.codepush.react.CodePush;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -38,6 +39,11 @@ public class MainApplication extends Application implements ReactApplication {
         @Override
         protected String getJSMainModuleName() {
           return "index";
+        }
+
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
         }
       };
 
