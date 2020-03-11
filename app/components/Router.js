@@ -198,6 +198,7 @@ export default withNamespaces(['language_setting', 'common'], {wait: true})(
   InitialNavigator,
 );
 
+// style for navigator
 const styles = StyleSheet.create({
   iconStyle: {
     flex: 1,

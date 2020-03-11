@@ -1,7 +1,4 @@
 import React, {Component} from 'react';
-import Router from './Router';
-import {withNamespaces} from 'react-i18next';
-import {createAppContainer} from 'react-navigation';
 import SplashScreen from 'react-native-splash-screen';
 import PushNotification from 'react-native-push-notification';
 import firebase from 'react-native-firebase';
@@ -13,19 +10,7 @@ import {
 import {GoogleSignin} from '@react-native-community/google-signin';
 import globals from './globals';
 import codePush from 'react-native-code-push';
-
-class WrappedStack extends Component {
-  static router = Router.router;
-  render() {
-    const {t} = this.props;
-    return <Router screenProps={{t}} {...this.props} />;
-  }
-}
-
-const ReloadAppOnLanguageChange = withNamespaces('common', {
-  bindI18n: 'languageChanged',
-  bindStore: false,
-})(createAppContainer(WrappedStack));
+import {ReloadAppOnLanguageChange} from './WrappedStack';
 
 class App extends Component {
   constructor(props) {
@@ -49,7 +34,7 @@ class App extends Component {
 
   /**
   Checking SignedIn Status with react-native-fbsdk
- */
+  */
   isSignedInFacebook = () => {
     AccessToken.getCurrentAccessToken()
       .then(user => {
@@ -83,8 +68,8 @@ class App extends Component {
   };
 
   /**
-  Checking SignedIn Status with google-signin
- */
+    Checking SignedIn Status with google-signin
+  */
   isSignedInGoogle = async () => {
     const isSignedIn = await GoogleSignin.isSignedIn();
     if (isSignedIn) {
@@ -101,7 +86,7 @@ class App extends Component {
   /**
     Get user info is signed in with google
     @return object
-   */
+  */
   getCurrentUserInfo = async () => {
     try {
       const response = await GoogleSignin.signInSilently();
@@ -117,7 +102,8 @@ class App extends Component {
 }
 
 let codePushOptions = {
-  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+  updateDialog: true,
   installMode: codePush.InstallMode.IMMEDIATE,
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
 };
 export default codePush(codePushOptions)(App);

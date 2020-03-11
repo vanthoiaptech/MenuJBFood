@@ -24,6 +24,7 @@ import {
 import globals from '../../globals';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {domain} from '../../../constants/urlDefine';
+import DeviceInfo from 'react-native-device-info';
 
 class Menu extends Component {
   constructor(props) {
@@ -302,6 +303,7 @@ class Menu extends Component {
       button,
       loginButtonTitle,
       divider,
+      version,
     } = styles;
     const {t} = this.props;
     const {user, isSignedIn} = this.state;
@@ -400,6 +402,9 @@ class Menu extends Component {
           <View style={divider} />
           {googleButtonJSX}
         </View>
+        <View style={version}>
+          <Text>Version {DeviceInfo.getVersion()}</Text>
+        </View>
       </View>
     );
   }
@@ -472,6 +477,10 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 5,
+  },
+  version: {
+    alignItems: 'center',
+    marginBottom: 5,
   },
 });
 

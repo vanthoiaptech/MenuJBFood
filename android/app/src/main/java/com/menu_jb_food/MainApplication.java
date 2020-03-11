@@ -15,6 +15,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.microsoft.codepush.react.CodePush;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          packages.add(new RNDeviceInfo());
           packages.add(new RNFirebaseMessagingPackage());
           packages.add(new RNFirebaseNotificationsPackage());
           return packages;
@@ -40,7 +42,11 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
-
+        
+        /** Override the getJSBundleFile method in order to let
+          the CodePush runtime determine where to get the JS
+          bundle location from on each app start
+        */
         @Override
         protected String getJSBundleFile() {
             return CodePush.getJSBundleFile();
